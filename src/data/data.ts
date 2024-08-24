@@ -28,7 +28,7 @@ export const showcaseData = [
             '/media/resqiar-5.webp',
             '/media/resqiar-6.webp'
         ],
-        demoURL: 'https://resqiar.hubku.com',
+        demoURL: 'https://res.hubku.com',
         sourceURL: 'https://github.com/resqiar/resdev',
         techs: [svelte, typescript, tailwind, golang, postgres]
     },

@@ -56,7 +56,7 @@ import { showcaseData } from '../data/data.ts'
 
         <section id="projects" class="bg-white dark:bg-gray-900 mt-16">
             {showcaseData.map((v, idx) => 
-                <div class={`flex ${(idx % 2 === 0) ? "flex-row" : "flex-row-reverse"} justify-start items-center px-4 mx-auto max-w-screen-xl xl:gap-16 sm:py-16 lg:px-6`}>
+                <div class={`flex flex-col my-12 lg:my-0 ${(idx % 2 === 0) ? "lg:flex-row" : "lg:flex-row-reverse"} justify-start items-center px-4 mx-auto max-w-screen-xl xl:gap-16 sm:py-16 lg:px-6`}>
                     <img class="dark:hidden" width="500" height="400" src={v.images[0]} alt="dashboard image">
                     <div class="mt-4 md:mt-0">
                         <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">{v.title}</h2>
