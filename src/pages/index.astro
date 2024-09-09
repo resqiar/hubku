@@ -1,35 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import MainNavbar from '../components/header/MainNavbar.astro';
+import MainHero from '../components/hero/MainHero.astro';
 import { showcaseData } from '../data/data.ts'
+import { Image } from 'astro:assets';
 ---
 
 <Layout title="Curated Projects All at Once | Hubku.com">
-    <nav class="bg-white border-gray-200 dark:bg-gray-900 mt-4">
-        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-            <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
-                <img src="/media/hubku-logo.png" height="40" width="120" alt="Hubku Logo" />
-            </a>
-        </div>
-    </nav>
+    <MainNavbar/>
+
     <main class="lg:mt-6">
-        <section class="bg-white dark:bg-gray-900">
-            <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
-                <a href="#" class="inline-flex justify-between items-center py-1 px-1 pr-4 mb-7 text-sm text-gray-700 bg-gray-100 rounded-full dark:bg-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700" role="alert">
-                    <span class="text-xs bg-violet-600 rounded-full text-white px-4 py-1.5 mr-3">New</span> <span class="text-sm font-medium">Binder app is out, see what's new</span> 
-                    <svg class="ml-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                </a>
-                <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Curated Projects Combined Here</h1>
-                <p class="mb-8 text-xs font-normal text-gray-700 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">Built by <a href="https://resqiar.hubku.com" class="underline">@resqiar</a>. It's a place where you can check out everything devs been working on, and maybe even use some of the stuff if it catches your eye. Think of it as my dev playground, all in one spot.</p>
-                <div class="flex flex-col mb-8 lg:mb-16 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
-                    <a href="#projects" class="hover:underline flex flex-col justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg focus:ring-4 focus:ring-violet-300 dark:focus:ring-violet-900">
-                        See The List
-                        <svg class="mt-2 animate-bounce w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19V5m0 14-4-4m4 4 4-4"/>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-        </section>
+        <MainHero/>
 
         <section class="bg-gray-100 -mt-22">
             <div class="max-w-screen-xl px-4 py-8 mx-auto text-center lg:py-16 lg:px-6">
@@ -54,10 +35,10 @@ import { showcaseData } from '../data/data.ts'
             </div>
         </section>
 
-        <section id="projects" class="bg-white dark:bg-gray-900 mt-16">
+        <section id="projects" class="bg-white dark:bg-gray-900 my-16">
             {showcaseData.map((v, idx) => 
-                <div class={`flex flex-col my-12 lg:my-0 ${(idx % 2 === 0) ? "lg:flex-row" : "lg:flex-row-reverse"} justify-start items-center px-4 mx-auto max-w-screen-xl xl:gap-16 sm:py-16 lg:px-6`}>
-                    <img class="dark:hidden" width="500" height="400" src={v.images[0]} alt="dashboard image">
+                <div class={`flex flex-col my-12 lg:my-0 ${(idx % 2 === 0) ? "lg:flex-row" : "lg:flex-row-reverse"} justify-start items-center px-4 mx-auto max-w-screen-xl xl:gap-16 sm:py-8 lg:px-48`}>
+                    <Image class="dark:hidden" width="500" height="400" src={v.images[0]} alt={v.title} />
                     <div class="mt-4 md:mt-0">
                         <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">{v.title}</h2>
                         <p class="mb-6 font-light text-gray-500 md:text-lg dark:text-gray-400">{v.description}</p>
@@ -65,12 +46,12 @@ import { showcaseData } from '../data/data.ts'
                             <a href={v.demoURL} class="inline-flex items-center text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:ring-violet-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-primary-900">
                                 Demo
                             </a>
-                        : ""}
+                            : ""}
                         {v.sourceURL ? 
-                            <a href={v.sourceURL} class="inline-flex items-center text-white hover:bg-violet-200 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-primary-900">
+                            <a href={v.sourceURL} class="inline-flex items-center border-gray-100 border-solid text-white hover:bg-violet-200 focus:ring-4 focus:ring-violet-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-violer-900">
                                 Source Code
                             </a>
-                        : "" }
+                            : "" }
                     </div>
                 </div>
             )}
