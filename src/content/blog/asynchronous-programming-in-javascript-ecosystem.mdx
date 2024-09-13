@@ -1,0 +1,530 @@
+---
+title: "Asynchronous Programming in JavaScript Ecosystem"
+desc: "Understand the advantages of JavaScript's asynchronous programming to do time-consuming tasks without interrupting the main thread. Learn how Promises and async/await improve readability, streamline code structure, and offer effective error handling."
+date: "2023-08-08"
+tags: ["javascript", "async", "async-await"]
+cover: "https://ik.imagekit.io/resdev/local/How_To_2__DNSao2lKW.png"
+author: "@resqiar"
+authorLink: "https://github.com/resqiar"
+---
+
+## Table of contents
+
+- [What is Asynchronous Programming?](#what-is-asynchronous-programming)
+  - [Example Time!](#example-time)
+  - [The distinct differences between concurrency and parallel](#the-distinct-differences-between-concurrency-and-parallel)
+  - [So why is asynchronous important in JS ecosystem?](#so-why-is-asynchronous-important-in-js-ecosystem)
+- [How to Handle Asynchronous in JavaScript](#how-to-handle-asynchronous-in-javascript)
+  - [Callback](#callback)
+  - [Promise](#promise)
+  - [Callback Hell!](#callback-hell)
+- [Async/Await](#asyncawait)
+  - [Async](#async)
+  - [Await](#await)
+  - [Async/await Error Handling](#asyncawait-error-handling)
+- [Conclusion](#conclusion)
+- [More to Read & References](#more-to-read--references)
+
+<hr/>
+
+# What is Asynchronous Programming?
+
+Before touching specific into asynchronous in JavaScript, let's deep dive into what is synchronous & asynchronous programming in general, that way we can understand and aligned what we are talking about here.
+
+**Synchronous Programming** always happens one at a time. When we call function A that needs 5 seconds to finish, function B will have
+to wait for 5 seconds before it can run.
+
+**Asynchronous Programming** on the other hand, is a way to run multiple long-running or heavy processes in a non-blocking manner.  
+That means we can run the heavy-task processes while still be able to doing other tasks and not blocking the main thread.
+
+When you call function A that needs 5 seconds, it will run in the background while the main program continues to executes function B. When function A finished in the background, it notifies the main program to process the result.
+
+Asynchronous can be done concurrently or in true parallel. 
+
+![Imgur](https://imgur.com/qD0r5OP.png)
+
+## Example Time! 
+**Lets see the example of both synchronous and asynchronous code in JavaScript.**
+
+```js
+function getData() {
+  console.log("2");
+}
+
+console.log("1");
+getData();
+console.log("3");
+```
+
+If you run and see the console, it will print sequentially; 1, 2, then 3. Just like normal, right? 
+That is synchronous, function will run one after the other.
+
+Now let's add asynchronous operation;
+
+```js
+function getData() {
+  setTimeout(() => {
+    console.log("2");
+  }, 5000); // 5 seconds waiting
+}
+
+console.log("1");
+getData();
+console.log("3");
+```
+
+When you run and observe the console, the result will be: 1, 3, *waiting...*, then 2!
+This demonstrates asynchronous behavior, where the operation does not block next or other functions.
+
+## The distinct differences between concurrency and parallel
+
+You may not ask what is the difference between concurrent and parallel, isn't that the same thing?
+   
+Well, they share similarities, but they are fundamentally distinct. 
+In fact, there is a common misconception where people mistakenly consider them as identical.
+
+- **Concurrency**
+
+  Concurrency refers to the execution of multiple processes in an interleaved-time manner. 
+
+  That means it **DOES NOT** necessarily run multiple processes simultaneously.
+
+  Instead, it manages processes using a **Scheduler**, which allocates time to a process to be executed, then move on to another task, allocates another time to be executed, move back when its done, move on to another task over an over again until every tasks finished. 
+  
+  **The switch happens very fast that it is creating an illusion of simultaneous execution.**
+
+  > So the whole mechanic here often referred to Time Slicing or Context Switching in a Scheduler.
+    
+  Look at this example:
+
+  ![imgur](https://imgur.com/2GbnJkL.gif)
+
+  Example above are neatly visualize how concurrency works, not necessarily the exact implementation but enough to show how it manages multiple processes. 
+
+  > NOTE: The algorithm used above is called Round Robin. While it is the simplest algorithm, it is not the most efficient.
+  > 
+  >   What are other algorithms that are more efficient? You can dive deeper here if you are interested.
+     
+ - **Parallelism**
+
+   Parallelism, is often referred as true parallel, executes multiple processes at the exact same time or simultaneously.
+   
+   Typically it involves splitting the processes into smaller pieces and put it into separate resources such as threads or other processesing units.
+
+   By leveraging multiple resources, Parallelism can executes multiple tasks in true parallel, resulting in faster, independent, and efficient execution.
+
+   ![Imgur](https://imgur.com/fvTyWLo.gif)
+
+## So why is asynchronous important in JS ecosystem?
+
+Asynchronous is important for JavaScript as the language itself is single-threaded.
+When the main thread of JavaScript is busy or blocked, as you can guess, the app will 
+becomes unresponsive. 
+
+Have you ever experienced browser lag when clicking some random button?
+until your browser just gave up and crash? That is often the result from heavy synchronous operations that just blocked the entire app.
+
+Therefore, it is important to leverage asynchronous operations for heavy processes such as fetching data from an API, saving to database or writing files. 
+This allows the app to execute other tasks while waiting for such processes to finish.
+
+<br/>
+
+At this point, we are talking too much about heavy processes without having any context or example, sorry!  
+
+Here are the examples of what are heavy-task that we are talking about:
+
+1. Network Request
+
+    Network requests can be unpredictable, especially when latency is high.
+Therefore, it is important not to block the user just to retrieve their profile synchronously using `XMLHttpRequest`.
+Better use asynchronous and recommended way to do it like the `fetch()` API.
+
+2. File Reading / Writing
+
+    File reading / writing can be ridiculously time-consuming when the file is huge. Default nodejs library for managing file (`fs`) has asynchronous method that we can use to not-blocking other processes.
+
+
+3. Timers
+
+    Scheduling your function to run at specific time delay using `setTimeout()` or `setInterval()` may introduce 
+blocking if done synchronously, luckily, JavaScript did them in asynchronous way.
+
+<br/>
+
+Alright, let's continue to deeper topic!
+
+# How to Handle Asynchronous in JavaScript
+
+There are two ways of handling async operations in JS, one is using callback, the other one is using Promise (recommended).
+
+## Callback
+
+Callback is a function that passed to another function as an argument to be called there.
+
+The simple way is that you define function A, pass it to function B, then function B will call function A inside of its body.
+
+```js
+function fetchData(callback) {
+  setTimeout(() => {
+    const data = "THIS IS THE EXAMPLE OF DATA!";
+
+    callback(data); // call function from parameter
+  }, 5000);
+}
+
+function printData(data) {
+  console.log(data);
+}
+
+// call fetch data with a callback function as an argument
+fetchData(printData);
+```
+
+or even the `setTimeout` itself accepts a callback function to be called when the delay finished.
+
+```js
+function callback() {
+  console.log("THIS IS THE EXAMPLE OF DATA!");
+}
+
+setTimeout(callback, 5000);
+```
+
+What happen when inside the function returns error? 
+
+```js
+function getData() {
+  setTimeout(() => {
+    throw Error("something went wrong!");
+
+    console.log("2");
+  }, 1000);
+}
+
+console.log("1");
+try {
+    getData();
+} catch (e) {
+    console.log("ERROR:", e);
+}
+console.log("3");
+```
+
+You might argue that "Hey! that's fine, I wrap it using try & catch!?", but when you run it,
+the error is not caught by `try/catch` block. The reason here is because the error occurs in different
+execution context and the code inside the `try` block has already finished executing by the time the error is thrown 
+asynchronously.
+
+You can actually handle this by passing another error callback function, which complicated things up! 
+
+This is one of the reason why direct callback like this is not recommended. Instead, use a **Promise** for doing asynchronous
+operations.
+
+## Promise
+
+A Promise in JavaScript is an object that represents the outcome of an asynchronous operation.
+Instead of being unaware of what we will receive in the end, a Promise provides all the possible outcomes of the asynchronous operation.
+
+A Promise can be these states:
+
+- **Pending**: initial state, neither fulfilled nor rejected.
+- **Fulfilled**: meaning that the operation was completed successfully.
+- **Rejected**: meaning that the operation was failed.
+
+<br/> 
+
+Think of it like going to restaurant. You call the waiter for order, then the waiter gives you a beeper/waiting ticket instead of the actual food.
+
+This is because the food is still being cooked and not ready yet. By having a beeper, you know that there are two possible outcomes.
+
+First possibility, your food order is ready and delivered to you. Such state is called fullfilled. 
+
+The other possibility could be the restaurant didn't have enough ingredients, 
+the chef didn't want to cook for you, or whatever that led to your food being cancelled.
+Therefore, that state is called rejected.
+
+Here are the example of Promise:
+
+```js
+function getData() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve("2");
+    }, 1000);
+  });
+}
+
+console.log("1");
+console.log(getData());
+console.log("3");
+```
+
+Above is the simple example of how you can do it using Promise.
+
+Notice inside the console, you get `Promise { <pending> }` logged, that is the initial
+state of `getData()` function.
+
+**Then how we can get the actual returned data?**
+
+When using Promise, we can use `then/catch` block to get whether the Promise fullfilled or rejected.
+
+```js
+getData()
+  .then((value) => {
+    // This block will be executed when the
+    // Promise state is "fullfilled"
+    console.log(value);
+  })
+  .catch((error) => {
+    // This block will be executed when the
+    // Promise state is "rejected"
+    console.error(error);
+  });
+```
+
+> There are quite a methods to do Promise, you can read more in [MDN Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise#promise_concurrency).
+
+## Callback Hell!
+
+One common problem encountered when using `then/catch` blocks in JavaScript is known as **Callback Hell**.
+This issue arises when there are excessive chains of `.then` callbacks over and over again
+until ***god-knows*** for how long.
+
+**Let's consider the example:**
+
+Assume we need to transform user's username, such as `user123` and turn it into
+`USER123_Hello World`. Just for the sake of example, we need at least 3 async operations to get the result, each of the operation
+dependent from the previous operation.
+
+```js
+function getUsername(username) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(username);
+    }, 1000);
+  });
+}
+
+function turnUppercase(username) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      // turn username to uppercase
+      resolve(username.toUpperCase());
+    }, 600);
+  });
+}
+
+function appendHelloWorld(username) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      // append "Hello World" to the end of username
+      const text = "Hello World";
+      const appended = `${username}_${text}`;
+
+      resolve(appended);
+    }, 500);
+  });
+}
+```
+
+Above are examples of three asynchronous operations that we need.
+Now, to execute them, we must consider their dependencies on one another.
+Therefore, we **CANNOT** proceed with something like this:
+
+```js
+// THIS CODE WILL RETURN ERROR
+const username = getUsername("user123").then((value) => value);
+const uppercased = turnUppercase(username).then((value) => value);
+const result = appendHelloWorld(uppercased).then((value) => value);
+
+console.log(result);
+```
+
+Above code will produce error since the `turnUppercase()` function is not getting the result of the username. Instead,
+we are passing a Promise as an argument, which messed things up!
+
+Therefore, we need to move them inside each `.then` callback method! 
+
+```js
+getUsername("user123")
+  .then((username) => {
+    // turn username into uppercase
+    turnUppercase(username)
+      .then((uppercased) => {
+        // append "Hello World" into the uppercased username
+        appendHelloWorld(uppercased)
+          .then((appended) => {
+            // finally the result!
+            console.log(appended);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
+Now it finally works!
+
+But oh my! it's getting messy! What's even worse is that if you have more functions to chain, you might ended up 
+trapped inside infinite callback! 
+
+This problem is ugly, hard to maintain, and will make you lost in the jungle of `.then` until you never coming back alive.
+
+![Imgur](https://imgur.com/IIAVLeh.png)
+
+Luckily, since ECMAScript 2017 (ES8), JavaScript introduces `async/await` that simplified this problem.
+
+# Async/Await
+
+Async/await is a new recommended feature in JavaScript that allows us writing asynchronous code in synchronous-like manner.
+
+Let's break-down `async/await` into two parts:
+
+## Async 
+
+In the context here, "async" refers to the usage of `async` keyword declared before the `function` keyword. 
+
+It allows the function to be written in a way that simplifies asynchronous operations and implicitly wraps the return value in a Promise.
+
+```js
+async function getUsername(username) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(username);
+    }, 1000);
+  });
+}
+```
+
+In the above code, `getUsername()` function is declared as an async function.
+By doing that, the function is automatically wrapped as a Promise. 
+
+We can still invoke it normally like so:
+
+```js
+getUsername("user123").then((value) => console.log(value));
+```
+
+## Await
+
+So what is Await?
+
+**Await is a keyword that is used to wait for a Promise / asynchronous code to get fullfilled or rejected.**
+
+It can only be used in `async function`. 
+
+<br/>
+
+> *"Think of it like going to restaurant. You call the waiter for order, then the waiter gives you a beeper/waiting ticket instead of the actual food..."*
+
+Remember the example before, using `await` means you instruct the waiter to specifically request the chef to prepare
+and serve your food exclusively. During this time, you don't engage in any other activities; you simply wait until your food is ready.
+
+<br/>
+
+In previous callback example also, our async functions are dependent from one to another, this is a perfect use for await keyword.
+
+```js
+async function getUsername(username) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(username);
+    }, 1000);
+  });
+}
+
+async function turnUppercase(username: string) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      // turn username to uppercase
+      resolve(username.toUpperCase());
+    }, 600);
+  });
+}
+
+async function appendHelloWorld(username: string) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      // append "Hello World" to the end of username
+      const text = "Hello World";
+      const appended = `${username}_${text}`;
+
+      resolve(appended);
+    }, 500);
+  });
+}
+
+const username = await getUsername("user123"); // wait for getUsername to finish
+const uppercased = await turnUppercase(username); // wait for turnUppercase to finish
+const result = await appendHelloWorld(uppercased); // wait for appendHelloWorld to finish
+
+console.log(result);
+```
+
+Clean right?! no `.then` chains convoluted all over the places!
+
+## Async/await Error Handling
+
+What happens when error occurs during one or more operations if we are not using `.catch`?
+
+Easy! we can just use `try/catch` block to catch all the errors into one centralized place.
+
+Let's introduce rejected operation to `turnUppercase`:
+
+```js
+...
+
+async function turnUppercase(username: string) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      // return error
+      reject("error in uppercasing!");
+
+      // turn username to uppercase
+      resolve(username.toUpperCase());
+    }, 600);
+  });
+}
+
+try {
+  const username = await getUsername("user123");
+  const uppercased = await turnUppercase(username);
+  const result = await appendHelloWorld(uppercased);
+
+  console.log(result);
+} catch (error) {
+  console.error("HEY SOMETHING WRONG!", error);
+}
+```
+
+When you run it, the error will be catch-ed inside the `catch` block, just like `.catch()` but much cleaner way.
+
+# Conclusion
+
+The core principle of asynchronous programming enables us to do time-consuming operations
+without blocking the main thread. Our application responsiveness and performance can be improved by using asynchronous operations.
+
+Tasks are carried out one at a time in synchronous programming, potentially resulting in blocking.
+
+The main thread can still be used for additional activities thanks to asynchronous programming,
+which enables many processes to be carried out concurrently in JavaScript runtime.
+
+Asynchronous operations can now be handled in JavaScript more elegantly and readable since Promises and async/await.
+Async/await makes the syntax simpler by enabling us to write asynchronous code in a synchronous-like way.
+
+We are able to handle errors with try/catch blocks and await the resolution of Promises with async/await,
+generating code that is less confusing and simpler to maintain. It eliminates the problems like callback hell and awkward error handling.
+
+# More to Read & References
+
+- Haverbeke, M. (2018). Eloquent JavaScript: A Modern Introduction to Programming. No Starch Press.
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await
+

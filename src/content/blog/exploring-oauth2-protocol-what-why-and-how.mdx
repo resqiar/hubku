@@ -1,0 +1,136 @@
+---
+title: "Exploring OAuth2 Protocol: What, Why, and How?"
+desc: "A comprehensive overview of the authentication process, from client registration to access token generation. Explore the key steps and security measures involved in OAuth2."
+date: "2023-08-08"
+tags: ["oauth", "google"]
+cover: "https://ik.imagekit.io/resdev/local/How_To_1__imIkIflIj.png"
+author: "@resqiar"
+authorLink: "https://github.com/resqiar"
+---
+
+## What is OAuth2?
+
+**TLDR**, OAuth2 is a protocol that act as a intermediary or a middleman. **OAuth2 stands for Open Authorization 2.0**, the next successor and modern standard of the obsolete version of 1.0. 
+
+This protocol enables secure access to third-party services without sharing user's login credentials. It allows users to grant limited information based on defined "**scopes**" to the third-party services. This way OAuth maintain the security of user's login credentials while ensuring third parties have no knowledge about them, therefore enhancing security & privacy.
+
+## Why we use it?
+
+To fully understand why we use OAuth2, we need to understand the problems this protocol aims to solve. The traditional client-server authentication model has several issues that OAuth2 aims to solve:
+
+1. Third-party services need to store users login credentials (username & password) somewhere in their database.
+2. Third-party services gain access to users restricted content without any control from the user's side, including what they can access and for how long.
+3. If users want to revoke the access, they have to change their password. Affecting all third-party services that they granted access to.
+
+OAuth2 addresses this issue by adding a new authorization layer between the client and server. **Instead of sharing username and password, it uses access token**. The token specifies the information that can be accessed, the duration of access, and other permissions granted by the user.
+
+By addressing the shortcomings of traditional authentication, OAuth2 revolutionizes the way we safeguard user information and make a secure interactions with third-party services.
+
+## Roles
+
+OAuth2 defines these four roles:
+
+1. Resource Owner
+2. Resource Server
+3. Client
+4. Authorization Server
+
+I'll give you an example, in the context of Resqiar.com implementing **Login with Google** using OAuth2, those four roles are as follow:
+
+1. **Resource Owner** -> Resource owner is the users that want to access Resqiar.com services.
+2. **Resource Server** -> Resource Server is the Google as it holds users data (profile, email, calendar, etc). 
+3. **Client** -> The whole Resqiar.com is the client since it is the third-party service that users want to access.
+4. **Authorization Server** -> The authorization server is responsible for checking the validity of the token, therefore it is also served by Google.
+
+> Note that Resource Server & Authorization Server are not only Google, it can be any provider that holds users data, for example, GitHub, Discord, Facebook, or even Slack. In here I just matching it with Resqiar.com that uses Google as a provider.
+
+## Abstract Flow
+
+Let's take a look how the abstract workflow of the OAuth2 in the context of `Login with Google` in Resqiar.com. 
+
+![Imgur](https://i.imgur.com/H5mopzU.png)
+
+**Step-by-step explanation of the flow**:
+
+1. The Client (Resqiar.com) request to the user to access certain protected resources. Let's assume their basic profile data.
+2. If the user agrees and authorizes the request, then the Client receives an Authorization Grant status.
+3. The Client sends a request to Authorization Server (Google) along with its identity (Client ID & Client Credential) to obtain the access token.
+4. The Authorization Server verifies the Authorization Grant and the client's identity. If both are valid, then the Authorization Server sends Access Token to the Client.
+5. The Client then use the Access Token to make a request for protected resources to Resource Server.
+6. The Resource Server verifies the validity of the Access Token, if valid then sends the requested Protected Resource back to the Client.
+
+By eliminating the need for the user's password during the authorization process above, OAuth enhances security and privacy, ensuring a more secure exchange of information between the Client, Authorization Server, and Resource Server.
+
+## OAuth2 Provider Examples
+
+There are quite a lot of trusted provider that developer can use for implementing OAuth2 authentication. By using trusted providers, it helps users trust your application even more. Here are a few examples of them:
+
+- **Google**:
+    Google provides OAuth2 as an authentication methods for its services. This provider is also used by **Resqiar.com** to handle the authentication process.
+- **Github**:
+    Which dev don't know GitHub? So if you want to integrate it as OAuth2 provider, you are in luck since GitHub provides the service for you.
+- **Facebook**:
+    Facebook also provides OAuth2 for authentication and authorization. With Facebook Login, you can give users option to log in using their Facebook accounts.
+- **Discord**: Nowadays favorite instant messaging platform and yes you can integrate OAuth2 to your application using Discord as a provider.
+
+> Above are just a tiny example of them, if you want to search for other provider, you can check here https://en.wikipedia.org/wiki/List_of_OAuth_providers
+
+## Difference between OAuth 2.0 & OAuth 1.0
+
+At this point you may ask why we talk a lot about 2.0 protocol, why not the previous 1.0 or 1.1? what happen to them and why 2.0 is nowadays standard?
+
+OAuth 2.0 is a complete overwrite for previous versions. It is not backward compatible and should be considered as a complete new protocol.
+
+### TLDR; Simplicity
+OAuth 1.0 brought significant changes to how developers interacted with services. Previously, we could make simple request with username and password, which was convenient. However, OAuth 1.0 introduced the requirement of cryptographic signatures for each request, making implementation more complex and often painful.
+
+Example with simple username & password request:
+
+```shell
+$ curl --user username:password https://api.example.com/profile
+```
+
+Example with OAuth 1.0:
+
+```shell
+$ curl -X GET \
+     -H 'Authorization: OAuth oauth_consumer_key="your_consumer_key", oauth_token="your_access_token", oauth_signature_method="HMAC-SHA1", oauth_timestamp="1234567890", oauth_nonce="abcdefg", oauth_version="1.0", oauth_signature="your_generated_signature"' \
+     https://api.example.com/profile
+```
+As you can see the request is bloated with lots of headers and this is often lead to instant *Mehhh* from developers.
+
+Therefore 2.0 addresses this issue and use `access_token` only:
+
+```shell
+$ curl https://api.example.com/profile -H "Authorization: Bearer <access_token>"
+```
+
+## Security Considerations
+While OAuth2 provides seamless & secure authentication process, it is not a silver bullet against all attacks & vulnerabilities. Therefore, as developers, we need to consider:
+
+1. **Keep your Client ID & Secret always secure!** use `.env` and never expose it to any environtment except your server.
+2. Even though the Authorization Server already strictly checks the URI, we need to **properly configure the Redirect URI** to prevent Open Redirection Attack, where attacker redirect the callback to their malicious sources.
+3. Following previous considerations, **do not allow users-defined Redirect URIs!**
+4. **Validate the state!** The state is a unique identifier you can pass before redirection to Authorization Server, this unique id will be returned back to Client upon completion. Sanitize & validate given state to prevent CSRF attack.
+5. **Always use HTTPS in prod!**  
+
+By adhering to these considerations, we can enhance the security of your OAuth2 integration.
+
+## Conclusion
+In conclusion, OAuth2 is a protocol that serves as an additional layer between clients and servers, providing a secure authentication process. It addresses the limitations of traditional client-server authentication by allowing access to third-party services without sharing user's login credentials. OAuth2 enhances security and privacy by limiting access based on defined scopes and utilizing access tokens.
+
+The implementation of OAuth2 offers several benefits, including improved security, controlled access to user data, and simplified integration with trusted OAuth2 providers. It allows users to authenticate using their existing accounts from providers such as Google, GitHub, Facebook, and Discord.
+
+OAuth2 differs significantly from its predecessor, OAuth 1.0. The major difference lies in the simplicity and ease of implementation. OAuth2 eliminates the complex cryptographic signatures required in OAuth 1.0, making it more developer-friendly.
+
+While OAuth2 provides a seamless and secure authentication process, it is important to consider security considerations. Keeping client IDs and secrets secure, configuring redirect URIs correctly, validating states, and enforcing HTTPS in production are crucial steps to enhance the security of OAuth2 implementations.
+
+<hr />
+
+## More to Read & References: 
+
+- https://datatracker.ietf.org/doc/html/rfc6749
+- https://www.oauth.com/oauth2-servers/differences-between-oauth-1-2
+- https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics
+
+

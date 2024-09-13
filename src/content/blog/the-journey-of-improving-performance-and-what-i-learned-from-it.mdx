@@ -1,0 +1,330 @@
+---
+title: "The Journey of Improving Performance and What I learned from It"
+desc: "In this blog, I'll share my journey and story of making Resqiar.com perform better. Improving performance is a continuous journey that requires dedication, effort, and testing. I hope my story provides more valuable assets or knowledge for me or you."
+date: "2023-12-19"
+tags: ["performance", "golang", "edge computing"]
+cover: "https://ik.imagekit.io/resdev/live/How_To_3__1__IVEjmAglc.png"
+author: "@resqiar"
+authorLink: "https://github.com/resqiar"
+---
+
+## What is Resqiar.com?
+If you are new, please welcome. This is my personal website that I have dedicated to learn and build products. It also provides a platform for you to create your own blog using markdown, so it's not only me who can write; you can too!
+If you are [interested to try](https://resqiar.com/auth), please don't hesitate 😃
+
+## Why I care so much about performance on personal app?
+Back in 2019-2021, during my early days, performance is less of my    concern, my goal was to learn and figure things out myself, so I build the predecessor of Resqiar.com ([Writegap](https://github.com/resqiar/writegap-web)) using Nextjs, styled-component, recoil, remark, rehype, next-mdx-remote, react-markdown, graphql, apollo, axios, next-i18next... 
+
+**Damn!** believe it or not, those are not even half of the dependencies in my [package.json](https://github.com/resqiar/writegap-web/blob/main/package.json). I deployed it to Vercel, the site took more than **5 seconds** to load. More than 1GB dedicated to `node_modules`. Horrible styled-components that I have to go through each time I open `.tsx` file. Don't mention bundle size because it was embarassing. It was super horrible but at least super fun learning process, I was able to learn a lot.
+
+With that experience, I now realize why thinking about performance does matters, it always does, even for our 1 user personal app. When you think about performance, at least one side of you will always be skeptical and look for a better way to do something, and that's a good practice.
+
+So I build Resqiar.com with performance in mind, so I picked these tech stacks:
+- Web: Svelte
+- Web Host: Vercel Serverless
+- Server: Go
+- Database: Postgres & Redis
+
+**Why not Astro?**
+I do use astro for [Parser.resqiar.com](https://parser.resqiar.com).
+
+**Why not HTMX?**
+At the time I initially wrote this site, I had no idea HTMX existed. I only learned about HTMX after hearing it from [ThePrimeagen](https://twitter.com/ThePrimeagen).
+
+Alright, enough with comparisons. I chose **Svelte** & **Go** because I like both simplicity and speed.
+
+I've used Svelte not only for this project but also for [visualizing algorithms](https://resqiar.github.io/algo-visualization) in a matrix table, sorting bars, and it feels incredibly smooth. For React people that don't know Svelte, to declare `useState`, you simply use a normal `let` declaration. For `useEffect` statements, just use a dollar ($) sign, and the most important thing is that there will be no 300KB of Javascript just for a Hello World page.
+
+I have no intention for going back to React again for my hobby projects. In fact, I hesitated to try [Qwik](https://qwik.builder.io/) because its style is based on React and JSX, which I don't really prefer.
+
+Of course, when I first started developing this site, I had no idea about what optimizations I'd need to implement. So I had to learn and adapt to sudden changes along the way. 
+
+Now, let's take a look at what progress or attempts of optimizations that I made during the development of this site.
+
+> **Disclaimer!**
+> 
+>   - All the tests were done in Jakarta, unless specified otherwise.
+>   - All displayed charts are averages from multiple tests.
+>   
+>   If you are interested to see the raw data, feel free to check this [Google Sheet](https://docs.google.com/spreadsheets/d/1vawRzwT0TlGOcEovFHuyCY49gpm0VtA5lAytlZd_eMc/edit?usp=sharing). Happy reading!
+
+# Pre-Attempt
+Before dumping all attempts that I made, we should understand the initial state of Resqiar.com when it came out in [v0.1.0-alpha](https://github.com/resqiar/resqiar.com/releases/tag/v0.1.0-alpha).
+
+![Pre-Attempt Stack](https://imgur.com/lKn4IYW.png)
+
+As you can see, it is quite simple, user hit Resqiar.com -> serverless spins up -> ask Go server for data -> serverless parse data & markdown -> svelte render everything and user finally get a blog.
+
+I am pretty use you already get the design flaw here, but don't get too soon, we will talk about that later.
+
+# Attempt 1: Why everything is slow?
+When I initially deployed this site, with hopes everything works according to my expectation, I was shocked to see that the first-time load reaching 4 seconds on average. Why? it turns out that I had deployed with stupid and wrong configurations.
+
+![Infra Before Image](https://imgur.com/FlWSGxy.png)
+*My infrastructures when I first deployed this site.*
+
+
+Can you see why this is a big problem?
+Yes, The infras are spread all over the planet, and this is a horrible idea. I did it because all of 'em were on a free tier, and it's good enough for testing. For the user though, this is bad — so bad that accessing to my personal page had to wait for six requests that are made all accross the globe.
+
+To fix this issue is pretty simple; gather all the infras in one place. So, I did just that. I bought a VPS and moved Postgres, Redis, and Go to one location — San Francisco.
+I also had to relocate Vercel serverless closer to the data center, so I moved it back to sfo1.
+
+![Infra After Image](https://imgur.com/aQHTL8q.png)
+
+Now, everything is good; everything is in one location. Users closer to the data center can access their data fast. For other users on the opposite side of the planet, at least it only has to make two intercontinental requests instead of six.
+Now, the initial page load feels smooth, with load times reduced from 4 seconds **down to an average of 1-2 seconds**. 
+
+"*You happy with 1-2 seconds? it is still slow!*" 
+
+Indeed it is, but considering the configurations at the time, I believed it was due to [cold boot](https://www.techopedia.com/definition/3332/cold-boot) and network latency. I was mostly happy and called it a day.
+
+# Attempt 2: Compress Everything!
+A week passed, and I still not very happy with my site. I felt like a disgrace as I watched my site took more than 1 second to load.
+
+I decided to do a little investigation and opened up the devtools. To my shock, I saw that the page size was a **whopping 2090KB**! Oh, crap!
+
+Immediately, I gather all my assets, compress, and converted all of them into more efficient formats. WEBP for image, WOFF2 for fonts, and so on. I also made all non-important images like carousel and all to be lazy-loaded. After all, why bother loading them ASAP if they're not crucial?
+
+I reduced the page size from 2090KB to 691KB — 66% reduction in size.
+![Before and after compress opt](https://imgur.com/Zcw9eTz.png)
+
+In Go, I also did compress the JSON generated response. Fortunately, achieving this was easy in [Go Fiber](https://gofiber.io/).
+They already provide a [middleware to compress](https://docs.gofiber.io/api/middleware/compress/) the response using `gzip`, `deflate`, and `brotli` depending on the `Accept-Encoding` header.
+
+All we needed to do was use it and choose what level of compression that we need in within `main` package.
+
+```go
+    import "github.com/gofiber/fiber/v2/middleware/compress"
+
+    ...
+	app.Use(compress.New(compress.Config{
+        // -1 disable compression
+        //  0 default compression
+        //  1 best compression speed
+        //  2 best compression
+		Level: 2, 
+	}))
+    ...
+```
+
+I ended up reducing the JSON payload from 18.47kb to 6.5kb — another 64% smaller.
+![json response before after opt](https://imgur.com/A20GGG9.png)
+
+<br/>
+
+# Attempt 3: Is it really the fault of cold boot?
+Another optimizations done, eveything went smooth, but still, sometimes the site takes more than 1 second to load. I started to question everything, what should I do? I already compress everything to be smaller, but still I haven't see a significant change to the performance. Did all of these the fault of cold boot? 
+
+Well, sort of, but it got me thinking about something that should have been considered the first time I designed the site.
+
+**Why did I parse the markdown in NodeJS (serverless)**? I have Go server but I parse the markdown to html in Node? doesn't make any sense!
+
+Yes! that was the click in my head! why I never thought of that before! 
+I immediately made a new branch for experimenting and make a preparation to move the markdown parser from [UnifiedJS](https://github.com/unifiedjs/unified) to [Goldmark](https://github.com/yuin/goldmark).
+
+I thought it was hard to replicate UnifiedJS in Goldmark, but when I saw the documentation, it was easy as hell!
+
+### UnifiedJS
+```ts
+export default async function parseMD(raw: string): Promise<string> {
+	const parsed = unified()
+		.use(remarkParse)
+		.use(remarkRehype, { allowDangerousHtml: true })
+		.use(remarkGfm) // Github Flavoured Markdown
+		.use(rehypeHighlight)
+		.use(rehypeExternalLinks, { target: '_blank', rel: ['noopener', 'noreferrer'] })
+		.use(rehypeSlug)
+		.use(rehypeAutolinkHeadings, {
+			behavior: 'wrap',
+			test: ['h1', 'h2']
+		})
+		.use(rehypeStringify, { allowDangerousHtml: true })
+		.processSync(raw);
+
+	const sanitizedDOM = sanitizeHtml(parsed.value.toString(), {
+		allowedTags: allowedTags,
+		allowedAttributes: {
+			code: ['class'],
+			span: ['class'],
+			img: ['src', 'alt', 'width', 'height', 'target'],
+			a: ['href', 'name', 'target', 'rel'],
+			h1: ['id'],
+			h2: ['id']
+		}
+	});
+
+	return sanitizedDOM;
+}
+```
+
+### Goldmark
+```go
+var (
+	parserEngine = goldmark.New(
+		goldmark.WithExtensions(
+			extension.GFM,
+			highlighting.NewHighlighting(
+				highlighting.WithStyle("paraiso-dark"),
+				highlighting.WithFormatOptions(
+					chromahtml.WithLineNumbers(true),
+				),
+			),
+			&anchor.Extender{
+				Texter:   anchor.Text("#"),
+				Position: anchor.After, },
+		),
+		goldmark.WithParserOptions(
+			parser.WithAutoHeadingID(),
+		),
+		goldmark.WithRendererOptions(
+			html.WithHardWraps(),
+			html.WithUnsafe(),
+		),
+	)
+	parserSanitization = bluemonday.UGCPolicy().AllowAttrs("style").OnElements("p", "span", "pre")
+	bufferPool         = sync.Pool{
+		New: func() interface{} {
+			return new(bytes.Buffer)
+		},
+	}
+)
+
+...
+
+func (service *ParserServiceImpl) ParseMDByte(s []byte) []byte {
+	// use buffer from the Pool
+	buf := bufferPool.Get().(*bytes.Buffer)
+
+	// restore resources back to the pool when done
+	defer bufferPool.Put(buf)
+
+	// since we are reusing resources, better reset it first
+	buf.Reset()
+
+	if err := parserEngine.Convert(s, buf); err != nil {
+		log.Println("Error parsing MD:", err)
+		return nil
+	}
+
+	return parserSanitization.SanitizeBytes(buf.Bytes())
+}
+```
+
+You see? It's not much of a different; in fact, it's a lot less bloated. What truly matters is that it's **BLAZINGLY FAST!!!**
+
+Notice that I used a Buffer [Pool](https://en.wikipedia.org/wiki/Pool_(computer_science)) to reduce memory usage, which allows released resources to be recycled and reused, significantly reducing the load on resources.
+
+Here is the Time to First Byte result on my local computer after the migration. Surprise! I just make it **82% faster!**
+
+![TTFB Local](https://imgur.com/hlO8SAN.png)
+
+After testing locally, I wanted to see the result globally, so I went to [Key CDN Tools](https://tools.keycdn.com/performance) to check what time it takes for the TTFB before migration, after migration with serverless, and after migration with edge. 
+
+Here are the results of the test:
+
+![TTFB Global](https://imgur.com/HFQQdN9.png)
+
+### Wait a second, what is Edge?
+The term "Edge" here refers to an approach to bring computing closer to the user. It's built on a lightweight V8 engine, effectively eliminating cold starts. 
+
+In serverless environtment, it has to spin up NodeJS, linking dependencies, and all that nonsense before even touching our actual code. All of that 1 second happens in one location, San Francisco. 
+
+Edge however, the computation process happens closer to the user. For example, if I'm in Jakarta, the computing will be done somewhere in Jakarta rather than San Francisco.
+
+There is, however, a caveat: you cannot make use of NodeJS-specific APIs, such as the file system API. 
+Before migration, I couldn't utilize Edge computing because UnifiedJS relied on file operations. That is why, after completing this migration, I was eager to test it on the Edge.
+
+### What's the improvement?
+Let's begin by evaluating the effectiveness of the migration from the JS parser to the Go parser based on the performance test results above.
+
+For fairness and meaningful comparison, we need to focus on a request that occurs closest to the data center.
+This helps ensure that network latency doesn't messed up our judgment. Let's take a look at San Francisco result.
+
+Before the migration, time to first byte took an average of **1068ms**. After the migration (serverless), it only took **229ms**, resulting in a significant **78% reduction in Time to First Byte (TTFB)**. What? OMG!
+
+When it comes to the Edge, on contrary, we need to take a different approach and analyst the performance farthest from the data center. After all, the purpose of Edge computing is to bring computing closer to the user for faster processing.
+
+"*But... why are the results slower? in some cases even 2x slower? Am I doing the test wrong?*"
+
+No, this outcome is expected, and I anticipated it. The reason for the slower performance is that while the computing is closer to the user, the database remains intact in San Francisco. Using Edge computing to distribute globally like this has its drawbacks.
+
+Your functions may run in Jakarta, for example, but you still need to connect to San Francisco to query data. As a result, this configuration recreated the issue mentioned in [**Attempt 1**](#attempt-1-why-everything-is-slow) above — the network latency outweighs the benefits of reducing cold start times. So, I ignore the Edge as of now.
+
+With these results in mind, I proceeded to merge the migration from UnifiedJS to Goldmark into production, happy with it, and once again, called it a day!
+
+# Last Attempt: There is a hope for the Edge?
+*"If your performance is currently fast, why attempt another improvement? Aren't you satisfied?"*
+
+Well... kind of... Yes, it has been fast, and I'm mostly happy with it. But sometimes, at 2 AM, when I want to continue my blog, it still takes more than 1 second to load. It bothers me to my very soul. I immediately stop continuing my blog, and begin investigating the problem instead. *Ohh come on.. not again...*
+
+This is not a problem with the code; it's a cold start issue.
+
+When nobody triggers the function for a certain amount of time, it goes to sleep, no matter how fast your code is, it still needs to wait until the server warms up. Once it's warmed up, requests happen smoothly, consistently taking less than 1 second.
+
+If you read **Attempt 3**, the Edge tends to have a tough time compared to serverless. Yes, the network latency basically just kills its benefits when it comes to faraway users. I believe this is an unsolvable issue, and the viable option right now is to occasionally deal with the cold boot.
+
+**Until recently!!!** — 6/09/23
+
+Casually learning in 2 AM, watching YouTube videos, and there is a video which [Theo brags about serverless](https://www.youtube.com/watch?v=UPo_Xahee1g).
+Theo addresses this issue where, when we have a database in one place, utilizing Edge is just hurting users. The special part is that Theo mentioned that Regional Edge can solve this problem!
+
+Well, this isn't actually a solution for the Edge; I would say it's a workaround to not have a cold start.
+
+### What is Regional Edge?!
+Regional Edge is basically the same as normal Edge; it runs on V8, which eliminates cold start, *bla bla bla..*
+
+But the different is that we limit or lock the Edge runtime to run in a certain location closest to our database.
+
+For example, I have a database in San Francisco. Instead of invoking Edge in Jakarta, London, Sydney, etc — where the users are — we limit the invocations to be only in San Francisco. Hence, it is regional, not global edge.
+
+**We leverage the benefit of no cold boot while also reduces the network latency!**
+
+Immediately, I stumbled upon how to do just that in [Vercel Docs](https://vercel.com/docs/functions/edge-functions#regional-edge-function-invocation) and discovered that it was straigtforward. All I needed to do was pass the location code in `svelte.config.js` option. 
+
+```ts 
+const config = {
+    ...
+    kit: {
+      adapter: adapter({
+          runtime: "edge",
+          regions: ["sfo1"], // run only in san francisco
+      })
+    }
+};
+```
+
+<br/>
+
+Why didn't I know about it sooner? **Definitely a skill issue.**
+
+Combining and comparing with the previous test, we know what the result is going to be like this:
+
+![Regional Edge Result](https://imgur.com/Grqv1lx.png)
+
+### What's the improvement?
+Based on the data we've seen above, it's clear that Regional Edge performs better than Global Edge in many locations. 
+This is especially true when requests come from places far away from the database, like Singapore, Sydney, Amsterdam, and so on.
+In these cases, Regional Edge can be up to **50% faster** in Singapore and an impressive **60% faster** in Sydney!
+
+When we put Regional Edge and Serverless side by side, Regional Edge often proves to be the faster option. While the performance gap might not as remarkable as when comparing it to Global Edge, any improvement is significant. For instance, San Francisco where TTFB improved from **229ms** to **194ms**, making a notable **15% increase in speed**. Similarly, in Sydney, **the improvement reaches 26%**, and in Amsterdam, it's an **impressive 29% faster** with Regional Edge compared to Serverless.
+
+One crucial thing to keep in mind about the Edge configuration is that it offers stable performance over time.
+Unlike Serverless, there are no delays associated with **"cold starts"**, which means we can consistently expect quick responses.
+
+These findings highlight the effectiveness of Regional Edge solutions, especially when you have users and databases spread out over different locations. 
+
+In summary, Regional Edge has been happily integrated, eliminating my concerns about cold starts. Perhaps even more importantly, I no longer need to fret over NodeJS (Serverless) performance :D
+
+# Conclusion and What's Next?
+This journey didn't go to waste; I love doing this, and it's started to pay off. I can now show my site to the most random guy online or offline without worrying if the site is too slow; how awkward will it be if it was?
+
+Of course, this isn't the last attempt, even though I already said it was. Maybe in the future, I will undertake another attempt, either making small fixes or even a full-blown rewrite? Who knows? 
+
+I might even rewrite the entire site in HTMX 🕵️
+
+Either way, I will try to update it here.
+
+### If you find this article useful, please spread the word! I would greatly appreciated it.
+
+Thank you for taking the time to read this article. Sorry if it was bad and have a great day!

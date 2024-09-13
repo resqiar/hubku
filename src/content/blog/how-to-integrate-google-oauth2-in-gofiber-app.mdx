@@ -1,0 +1,365 @@
+---
+title: "How to Integrate Google OAuth2 in GoFiber App"
+desc: "Learn to implement Google OAuth in your GoFiber app. Enhance security, simplify authentication, and provide users with convenient access while eliminating the need for password-based authentication."
+date: "2023-08-08"
+tags: ["go", "gofiber", "oauth", "google"]
+cover: "https://ik.imagekit.io/resdev/local/How_To__CNZcSMGL.png"
+author: "@resqiar"
+authorLink: "https://github.com/resqiar"
+---
+
+# What is Google OAuth2 and Why We Use It?
+
+Google OAuth2 is an authentication and authorization framework provided by Google. It allows users to grant third-party applications limited access to their Google accounts without sharing their actual login credentials. Instead, users can authorize applications to access their Google account data using tokens.
+
+### I'm pretty sure you already knew it, so let's go diving into it!
+
+## 1. Initialize Project Folder
+First we need to initialize the project folder. **If you already have a project, you can skip it.**
+
+```bash
+    go mod init <module-name>
+```
+
+You can change the `<module-name>` to your project name.
+
+## 2. Install Required Packages
+
+### GoFiber Itself
+
+```bash
+    go get github.com/gofiber/fiber/v2
+```
+### Oauth2
+
+Oauth2 is a package for Golang containing client implementation for Open Authorization (OAuth).
+
+```bash
+    go get golang.org/x/oauth2
+```
+### Godotenv
+
+This package will be used to get .env variable values, where all your secrets will be placed.
+
+```bash
+    go get github.com/joho/godotenv
+```
+
+## 3. Get OAuth Token From Google Console
+
+Before we can use Google OAuth in our app, we need to get ClientID and also the Credential Token. You can follow this step if you don't do it yet.
+
+1. Go to the [Google Cloud Platform Console](https://console.cloud.google.com/).
+2. Select your associated project or create a new one.
+3. After you setting up your project, now select **API & Services** in the Sidebar menu, and choose **Credentials**.
+
+    ![Imgur](https://i.imgur.com/m73XSYd.png)
+
+4. Click **New Credentials**, then select **OAuth client ID**. 
+
+    ![Imgur](https://i.imgur.com/2gce9iB.png)
+
+5. Follow the creation process, and make sure to include your `localhost:<port>` of your server app here.
+    
+    The Authorised JS Origins are from where the request are allowed to access the OAuth. While Authorised Redirect URIs are where you allow the Google redirect you to after the authentication process has finished.
+
+    ![Imgur](https://i.imgur.com/lhsyktU.png)
+
+6. After you comfortable with the values, proceed to click **Create**.
+7. After create process finished, you will get the ClientID & ClientSecret, save or copy them elsewhere as we need them later.
+
+
+## 3. Setting Up The Server
+
+Now as a start, we need to set up the server and where should it listen to. Create a new file in the root directory, you can name it as you like, I am gonna go with `server.go`. 
+
+In `server.go`, include the following code:
+
+```go
+package main
+
+import (
+	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
+)
+
+func main() {
+	// initialize godotenv to read all .env files
+	godotenv.Load()
+
+	// initialize new instance of fiber
+	server := fiber.New()
+
+	server.Get("/", func(c *fiber.Ctx) error {
+		return c.SendString("Hello from Fiber!")
+	})
+
+	// bind server to listen to port 8000,
+	// change the port as you like.
+	server.Listen(":8000")
+}
+```
+
+Inside the code, we initialize fiber instance and make it listen to port `8000`, you can change the port as you like.
+Also we set-up the `/` route and send a string of "Hello from Fiber!". 
+
+You can run the server by running this command in the terminal:
+
+```bash
+    go run server.go
+```
+
+After success, when you go to `localhost:8000`, it should return and show you "Hello from Fiber!"
+
+> Whenever we change the code, the command above does not re-run automatically, therefore we need to restart the server manually, I suggest you to use this awesome package called [Air](https://github.com/cosmtrek/air) to do live-reload development.
+
+## 4. Create `.env` File 
+
+This is where you secret live, create `.env` file in the root folder and fill in with your ClientID & ClientSecret that we got beforehand.
+
+```bash
+    # Google Auth
+    G_CLIENT_ID= <paste your client id here>
+    G_CLIENT_SECRET= <paste your client secret here>
+    
+    # Make sure this value is the same as the one that we initialize 
+    # in the google console before.
+    G_REDIRECT="http://localhost:8000/auth/callback"
+```
+
+## 5. Initialize Routes
+
+Now we enter the main part of the code. What we need is that we need to instantiate 2 routes;
+
+ - `/google` : This is the route where user will hit before it is redirected to Google authentication page.
+ - `/auth/callback` : This is the route where the google will redirect the user back after completing the auth process.
+
+> Note: you can change the routes name to whatever you like, but make sure the call back route is the same as you declare in the Google Console.
+
+In `server.go`, add these codes:
+
+```go
+server.Get("/google", func(c *fiber.Ctx) error {
+    return c.SendString("Hello from google!")
+})
+
+server.Get("/auth/callback", func(c *fiber.Ctx) error {
+    return c.SendString("Hello from google callback!")
+})
+```
+
+Now those two routes are available and you can check in the browser.
+
+## 6. Completing `/google`
+
+Okay now let's focus on this route first. Now what we need to do is initialize the Google Config. 
+
+In the `server.go`, edit the Import statement to also include the oauth & os package:
+
+```go
+import (
+	"os"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
+)
+```
+
+Then we can initialize the config for our Google Oauth
+
+```go
+// create a config for google config
+conf := &oauth2.Config{
+    ClientID:     os.Getenv("G_CLIENT_ID"),
+    ClientSecret: os.Getenv("G_CLIENT_SECRET"),
+    RedirectURL:  os.Getenv("G_REDIRECT"),
+    Endpoint:     google.Endpoint,
+    Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile"},
+}
+
+server.Get("/google", func(c *fiber.Ctx) error {
+ ...
+}
+```
+
+In the above code we get our ClientID, ClientSecret, and RedirectURL from the `.env` file that we declare earlier, this way we don't need to worry about leaking our secret keys.
+
+> **What are Scopes?**, Google uses scopes to request specific permissions from the user. In our code, we only need access to the user's email and basic profile, nothing more. If you want more, you can check another field in your Google Console.
+
+Now we can create the URL and redirect the user there. This URL is where the login process will happen.
+
+```go
+server.Get("/google", func(c *fiber.Ctx) error {
+    // create url for auth process.
+    // we can pass state as someway to identify
+    // and validate the login process.
+    URL := conf.AuthCodeURL("not-implemented-yet")
+
+    // redirect to the google authentication URL
+    return c.Redirect(URL)
+})
+```
+
+**NOTE:**
+"not-implemented-yet" is a placeholder where you would typically pass a state parameter to Google. This parameter helps verify the validity of the user's request. You can replace "not-implemented-yet" with a unique ID and check it later during the callback. However, for the sake of this simplicity, we won't be implementing this functionality, as it goes beyond the scope of the current topic.
+
+### Now you can hit the `/google` in the browser and see what happen! 
+
+If the code is working properly, you should see something like:
+
+![Imgur](https://i.imgur.com/D4Y6oIx.png)
+
+Now we are half way through!
+
+## 7. Completing `/auth/callback`
+
+Now we need to handle when the user succeeding the auth process. The algorithms are as follow:
+
+- When the user done, Google will redirect the user back to `/auth/callback`
+- Retrieve auth code from the redirection process
+- Convert auth code code into access token
+- Make an HTTP request to convert access token into user data
+- You can extend the functionality based on the user data, such as saving it into database, sessions, etc!
+
+Okay enough talking!
+
+<br/>
+
+Now in the `/auth/callback` function, add these following lines:
+
+```go
+server.Get("/auth/google/callback", func(c *fiber.Ctx) error {
+  // get auth code from the query
+  code := c.Query("code")
+
+  // exchange the auth code that retrieved from google via
+  // URL query parameter into an access token.
+  token, err := conf.Exchange(c.Context(), code)
+  if err != nil {
+    return c.SendStatus(fiber.StatusInternalServerError)
+  }
+
+  // convert token to user data
+  profile, err := libs.ConvertToken(token.AccessToken)
+  if err != nil {
+    return c.SendStatus(fiber.StatusInternalServerError)
+  }
+
+  return c.JSON(profile)
+})
+```
+
+Now as you can see there will be an error in `libs.ConvertToken`, that is expected as we don't create the function yet.
+
+now create a file in `libs/convertToken.go`, this file will be responsible to exchange the token into user data. 
+
+**Why we separate it?** to make the code a bit cleaner.
+
+In the `convertToken.go` add these following code:
+```go
+package libs
+
+import (
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+)
+
+// this is what the data would look like, after the convert
+// you can use this reference to get the data and save to db for example.
+type GooglePayload struct {
+	SUB           string `json:"sub"`
+	Name          string `json:"name"`
+	GivenName     string `json:"given_name"`
+	FamilyName    string `json:"family_name"`
+	Picture       string `json:"picture"`
+	Email         string `json:"email"`
+	EmailVerified bool   `json:"email_verified"`
+	Locale        string `json:"locale"`
+}
+
+func ConvertToken(accessToken string) (*GooglePayload, error) {
+    // call http request to this URL, this is a valid
+    // URL provided from google to convert access token into 
+    // valid user data
+    resp, httpErr := http.Get(fmt.Sprintf("https://www.googleapis.com/oauth2/v3/userinfo?access_token=%s", accessToken))
+    if httpErr != nil {
+        return nil, httpErr
+    }
+
+    // clean up when this function returns (destroyed)
+    defer resp.Body.Close()
+    
+    // Reads the entire HTTP body from resp.Body using ioutil.ReadAll. 
+    // If any error occurs during the read operation, it is 
+    // returned as bodyErr. Otherwise it is stored in the respBody variable.
+    respBody, bodyErr := ioutil.ReadAll(resp.Body)
+    if bodyErr != nil {
+        return nil, bodyErr
+    }
+
+    // Unmarshal raw response body to a map
+    var body map[string]interface{}
+    if err := json.Unmarshal(respBody, &body); err != nil {
+        return nil, err
+    }
+
+    // If json body containing error,
+    // then the token is indeed invalid. return invalid token err
+    if body["error"] != nil {
+        return nil, errors.New("Invalid token")
+    }
+
+    // Bind JSON into struct
+    var data GooglePayload
+    err := json.Unmarshal(respBody, &data)
+    if err != nil {
+        return nil, err
+    }
+
+    return &data, nil
+}
+```
+This code is simply do HTTP request to `https://www.googleapis.com/oauth2/v3/userinfo?access_token=` while passing the access_token. The response will be bind into GooglePayload struct.
+
+Don't forget to import this file into `server.go`
+```go
+import (
+	"fiber-goauth/libs"
+	"os"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
+)
+```
+
+
+## 8. DONE!
+
+Now try the login process, and the user data should be present as JSON! like this example:
+
+```json
+{ 
+  "sub": "12345678910",
+  "name": "Resqi Ageng Rahmatullah",
+  "given_name": "resqiar",
+  "family_name": "resqiar",
+  "picture": "https://lh3.googleusercontent.com/a/AAcHTteL_UdEHuB3XYXKXjXBBXXXOddptab5ABujj-0FmQ=s96-c",
+  "email": "youruseremail@email.com",
+  "email_verified": true,
+  "locale": "en-GB"
+}
+```
+
+Now you are able to do Google auth process with Gofiber & Oauth2, you can extend the functionality yourself such as saving the data into database and also to sessions.
+
+I'll try to cover sessions in the upcoming Blog, stay tune!
+
+### Thanks for Reading!
+> GITHUB REPO: https://github.com/resqiar/gofiber-goauth2

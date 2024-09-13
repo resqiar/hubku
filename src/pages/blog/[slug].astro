@@ -1,0 +1,62 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import MainNavbar from '../../components/header/MainNavbar.astro';
+ 
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+ 
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post: CollectionEntry<'blog'>) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<Layout
+    title={`${post.data.title} | Hubku.com`}
+>
+    <head>
+		<link rel="stylesheet" href="/md.css">
+    </head>
+
+    <MainNavbar active="blog" />
+
+    <main class="my-12 mx-4 lg:mx-36">
+        <div class="flex">
+        <article class="w-full lg:w-9/12">
+            <div>
+                <h1 class="font-bold text-4xl">{post.data.title}</h1>
+                <p class="text-lg mt-2">{post.data.desc}</p>
+            </div>
+            <div class="flex items-center gap-1 my-2">
+                <p>
+                    By -
+                </p>
+                <a href={post.data.authorLink} class="underline">
+                    <p class="">{post.data.author}</p>
+                </a>
+                <span>On {post.data.date.toDateString()}</span>
+            </div>
+            <img
+                src={post.data.cover}
+                alt={post.data.title}
+                class="object-cover object-center my-8"
+            />
+            <div class="markdown-body my-12">
+                <Content />
+            </div>
+        </article>
+
+        <sidebar class="hidden lg:static w-3/12">
+        </sidebar>
+        </div>
+    </main>
+</Layout>

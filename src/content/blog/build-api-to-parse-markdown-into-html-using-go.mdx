@@ -1,0 +1,306 @@
+---
+title: "Build API to Parse Markdown into HTML Using GO"
+desc: "Markdown is easy to write, but you can't directly show it to the browser, you still need HTML. So, let's create our own API that takes Markdown, parse it to HTML, and send it back.  We will use GO, Echo, and Goldmark!"
+date: "2023-10-07"
+tags: ["markdown", "golang", "parsing", "goldmark"]
+cover: "https://ik.imagekit.io/resdev/live/How_To__1_-min_gO7JOquNK.png"
+author: "@resqiar"
+authorLink: "https://github.com/resqiar"
+---
+
+Markdown is easy to write, but you can't directly show it into the browser, you still need HTML. So, let's create our own **API** that takes Markdown, parse it to HTML, and send it back. 
+
+Sounds good? alright, let's do it.
+
+# Init Module
+First thing first, we need to initialize the project. I will create a new folder called `markdown-converter` and inside that, run this command to initialize GO project.
+
+```bash
+go mod init markdown-converter
+```
+> You can change the name of the project to whatever you like
+
+# Init Server
+For the server, I will use [Echo](https://echo.labstack.com/) as a simple http server, you can use anything you want, it doesn't matter. 
+
+I use it because it is minimalistic and simple.
+
+**Hello-World server**:
+Let's create a main file, name it `main.go`. Then create the simplest hello world server. Then we can start from there.
+
+```go
+package main
+
+import (
+    "net/http"
+    
+    "github.com/labstack/echo/v4"
+)
+
+func main() {
+    e := echo.New()
+
+    e.GET("/", func(c echo.Context) error {
+        return c.String(http.StatusOK, "Hello, World!")
+    })
+
+    e.Logger.Fatal(e.Start(":3131"))
+}
+```
+
+Then we can run:
+```bash
+go run main.go
+```
+Browse to `localhost:3131` then you'll see the Hello, World! message
+
+<br/>
+
+# Installing Markdown Library
+
+We need at least 2 libraries for this job:
+- **Goldmark**
+The one which responsible to parse Markdown into AST tree and then turn it into HTML.
+
+- **Chroma**
+Syntax highlighting for our code
+
+- **Sanitizer?**
+By default, Goldmark strips out bad code in our markdown. It is safe by default. Of course you can change it into unsafe and integrate [Bluemonday](https://github.com/microcosm-cc/bluemonday) as a customizeable sanitizer.
+
+Let's install Goldmark and Chroma
+
+```bash
+go get github.com/yuin/goldmark
+go get github.com/alecthomas/chroma/v2/formatters/html
+```
+
+<br/>
+
+# Convert Function
+
+Now let's make a dedicated function that takes a markdown input and returns the result of the conversion.
+
+Below the main function, let's create a new function called `convert()`. This function is accepting `md` as a paremeter and emits `[]byte` and error as the output:
+
+```go
+
+func main(){
+    ...
+}
+
+func convert(md []byte) ([]byte, error) {
+    // not implemented yet
+}
+```
+
+Now let's define a configuration for Goldmark parser. This configs will be our base for how Goldmark parse our Markdown. We can change how it looks in the end and we can also add extensions. For more configurations, you can head to [Goldmark Docs](https://github.com/yuin/goldmark#parser-and-renderer-options).
+
+
+```go
+import (
+	...
+
+	html "github.com/yuin/goldmark/renderer/html"
+	chroma_html "github.com/alecthomas/chroma/v2/formatters/html"
+	highlighting "github.com/yuin/goldmark-highlighting/v2"
+	"github.com/yuin/goldmark"
+	"github.com/yuin/goldmark/extension"
+	"github.com/yuin/goldmark/parser"
+)
+
+
+var (
+    md_engine = goldmark.New(
+	goldmark.WithExtensions(
+	    // enable Github Flavoured Markdown
+	    extension.GFM,
+	    highlighting.NewHighlighting(
+		// set theme for code highlighter.
+		// see more theme here: https://swapoff.org/chroma/playground
+		highlighting.WithStyle("paraiso-dark"),
+		highlighting.WithFormatOptions(
+		    // enable numbering in the left of the code
+		    chroma_html.WithLineNumbers(true),
+		),
+	    ),
+	),
+	goldmark.WithParserOptions(
+	    // enable auto heading for heading,
+	    // it will automatically generate something like:
+	    // id="title-of-the-heading", id="i-will-buy-popcorn" 
+	    parser.WithAutoHeadingID(),
+	),
+	goldmark.WithRendererOptions(
+	    // render newlines as <br/>
+	    html.WithHardWraps(),
+	),
+)
+
+func main() {
+    ...
+}
+
+func convert(md []byte) ([]byte, error) {
+    ...
+}
+```
+
+Now we're done doing config thing, now we can start parsing the HTML. 
+Honestly, it will be super straightforward.
+
+In the convert function, we can just do:
+
+```go
+func convert(md []byte) ([]byte, error) {
+    var buffer bytes.Buffer
+
+    if err := md_engine.Convert(md, &buffer); err != nil {
+	    log.Println("Error parsing MD:", err)
+	    return nil, err
+    }
+
+    return buffer.Bytes(), nil
+}
+```
+
+See? that is easy and straightforward process. We just initialize a new buffer, pass the md input and a buffer into Goldmark's Convert method and done. As easy as that.
+
+Now what we need to do is to create an HTTP handler to receive the input and return the HTML result.
+
+<br/>
+
+# HTTP Handler
+
+Now we can just filling up the handler of our HTTP route with a new function.
+
+```go
+func main() {
+    ... 
+
+    app.POST("/", func(c echo.Context) error {
+        var payload []byte
+
+        // read the body and bind it into payload
+        payload, err := io.ReadAll(c.Request().Body)
+        if err != nil {
+            return c.NoContent(http.StatusBadRequest)
+        }
+
+        // now we call the convert function we created
+        // with payload as an argument.
+        parsed, err := convert(payload)
+        if err != nil {
+            return c.NoContent(http.StatusBadRequest)
+        }
+
+        // send the parsed content into a blob of HTML
+        return c.Blob(http.StatusOK, "application/html", parsed)
+    })
+
+    ...
+}
+```
+
+
+Not hard at all, we are just doing simple HTTP business. 
+
+Now we are done and we are able to run the server and test it.
+
+
+```bash
+go run main.go
+```
+
+<br/>
+
+# Testing
+
+Now let's make sure the API is working.
+We can use CURL to check if the API is working properly or not, just run this command in your terminal.
+
+```bash
+curl -X POST -H "Content-Type: application/octet-stream" -d '
+# Hello World 
+This is a paragraph
+**Should be bold**
+*Should be italic*
+'  localhost:3131
+```
+
+The result will be something like this:
+
+```html
+<h1 id="hello-world">Hello World</h1>
+<p>This is a paragraph<br>
+<strong>Should be bold</strong><br>
+<em>Should be italic</em></p>
+```
+
+Yeyy! if it works as you expected, than that's it, you can customize and extend it further on your own!
+
+<br/>
+
+# Performance Optimizations
+I like thinking about performance in my code. What we can do here to improve performance?
+
+Right now, our code works just fine, we don't do something special and clever about it. 
+
+Let's make it awesome, and the way to make it awesome and fast is to think with the perspective of "How we can help GC?". Yes, everytime we call the convert function, it will create a new buffer, which means more memory allocated and deallocated.
+
+This is fine for small feat, but when the code is bombarded with thousands of requests at the same time, the [GC](https://en.wikipedia.org/wiki/Garbage_collection_(computer_science)) have to do hard jobs freeing our buffer. It will get slow pretty quickly. 
+
+So what we can do to help is to reuse the buffer instead of dropping it. That way, we can help our GC and our memory.
+
+Fortunately, it is easy to do that in GO, we can just use `sync.Pool` package that comes with Go.
+
+Now let's delete our buffer in convert function and move it into package level variable, just under the config of `md_engine` as a new Buffer pool.
+
+```go
+import (
+    "sync"
+    ...
+)
+
+var (
+    md_engine = ...
+    buffer_pool = sync.Pool{
+	// create a new buffer as the initializations,
+	// the buffer will be reused whenever possible.
+	New: func() interface{} {
+	    return new(bytes.Buffer)
+	},
+    }
+)
+
+func main() { ... }
+
+func convert(s []byte) ([]byte, error) {
+    // use buffer from the buffer pool
+    buffer := buffer_pool.Get().(*bytes.Buffer)
+
+    // restore buffer back to the pool when done
+    defer buffer_pool.Put(buffer)
+
+    // since we are reusing resources, better reset it first
+    buffer.Reset()
+
+    // pass markdown and a buffer to Convert
+    if err := md_engine.Convert(s, buffer); err != nil {
+	log.Println("Error parsing MD:", err)
+	return nil, err
+    }
+
+    return buffer.Bytes(), nil
+}
+```
+
+Now when the convert function is called, whenever possible, it will try to reuse the buffer from the pool instead of recreating a new one. So, we make our program less memory hog and of course faster!
+
+> **GITHUB REPO**:
+> Here is the github repo for this project, feel free to use it, contribute, and make sure you give it a star :D <br/>
+> https://github.com/resqiar/markdown-converter
+
+## Thanks
+Hey thanks for reading the article, I appreciate it so much. Hit me on [Twitter / X](https://twitter.com/resqiar_) if you find it useful!
+Have a great day!
