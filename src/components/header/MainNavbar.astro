@@ -14,8 +14,8 @@ const { active } = Astro.props
 					<p class={`px-2 py-2 hover:underline hover:font-bold ${active === "blog" ? "underline font-bold" : ""}`}>Blog</p>
 				</a>
 
-				<a href="/sales" class="m-0 mx-2 rounded p-0">
-					<p class="highlight-container px-2 py-2 hover:font-bold">
+				<a href="/sale" class="m-0 mx-2 rounded p-0">
+					<p class={`highlight-container px-2 py-2 hover:font-bold ${active === "sale" ? "font-bold" : ""}`}>
 						<span class="highlight">
 							Code for Sale
 						</span>
