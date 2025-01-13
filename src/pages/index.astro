@@ -2,59 +2,199 @@
 import Layout from '../layouts/Layout.astro';
 import MainNavbar from '../components/header/MainNavbar.astro';
 import MainHero from '../components/hero/MainHero.astro';
-import { showcaseData } from '../data/data.ts'
-import { Image } from 'astro:assets';
+import 'swiper/css';
 ---
 
-<Layout title="Curated Projects All at Once | Hubku.com">
+<Layout title="Big Ideas with Perfect Software Collections | Hubku.com">
     <MainNavbar/>
 
-    <main class="lg:mt-6">
+    <main>
         <MainHero/>
 
-        <section class="bg-gray-100 -mt-22">
-            <div class="max-w-screen-xl px-4 py-8 mx-auto text-center lg:py-16 lg:px-6">
-                <dl class="grid max-w-screen-md gap-8 mx-auto text-gray-900 sm:grid-cols-4 dark:text-white">
-                    <div class="flex flex-col items-center justify-center">
-                        <dt class="mb-2 text-3xl md:text-4xl font-extrabold">80+</dt>
-                        <dd class="font-light text-gray-500 dark:text-gray-400">projects</dd>
-                    </div>
-                    <div class="flex flex-col items-center justify-center">
-                        <dt class="mb-2 text-3xl md:text-4xl font-extrabold">2265+</dt>
-                        <dd class="font-light text-gray-500 dark:text-gray-400">hours dedicated</dd>
-                    </div>
-                    <div class="flex flex-col items-center justify-center">
-                        <dt class="mb-2 text-3xl md:text-4xl font-extrabold">10+</dt>
-                        <dd class="font-light text-gray-500 dark:text-gray-400">technologies</dd>
-                    </div>
-                    <div class="flex flex-col items-center justify-center">
-                        <dt class="mb-2 text-3xl md:text-4xl font-extrabold">2+</dt>
-                        <dd class="font-light text-gray-500 dark:text-gray-400">developers</dd>
-                    </div>
-                </dl>
-            </div>
-        </section>
+        <section id="projects" class="w-full flex flex-col items-center bg-white dark:bg-gray-900 my-16">
+            <div class="px-4 max-w-4xl mt-6">
+                <div class="flex flex-col lg:flex-row justify-between">
+                    <h2 class="font-bold text-4xl">Sentinel.</h2>
 
-        <section id="projects" class="bg-white dark:bg-gray-900 my-16">
-            {showcaseData.map((v, idx) => 
-                <div class={`flex flex-col my-12 lg:my-0 ${(idx % 2 === 0) ? "lg:flex-row" : "lg:flex-row-reverse"} justify-start items-center px-4 mx-auto max-w-screen-xl xl:gap-16 sm:py-8 lg:px-48`}>
-                    <Image class="dark:hidden" width="500" height="400" src={v.images[0]} alt={v.title} />
-                    <div class="mt-4 md:mt-0">
-                        <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">{v.title}</h2>
-                        <p class="mb-6 font-light text-gray-500 md:text-lg dark:text-gray-400">{v.description}</p>
-                        {v.demoURL ? 
-                            <a href={v.demoURL} class="inline-flex items-center text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:ring-violet-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-primary-900">
-                                Demo
-                            </a>
-                            : ""}
-                        {v.sourceURL ? 
-                            <a href={v.sourceURL} class="inline-flex items-center border-gray-100 border-solid text-white hover:bg-violet-200 focus:ring-4 focus:ring-violet-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-violer-900">
-                                Source Code
-                            </a>
-                            : "" }
+                    <div class="mt-4 md:mt-0 w-full md:w-fit flex">
+                        <button type="button" class="flex gap-1 items-center text-white bg-amber-700 hover:bg-amber-800 focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-sm px-3 md:px-5 py-2.5 me-2 mb-2 dark:bg-amber-600 dark:hover:bg-amber-700 focus:outline-none dark:focus:ring-amber-800">
+                            Buy the Code
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
+                                <path fill-rule="evenodd" d="M15.75 2.25H21a.75.75 0 0 1 .75.75v5.25a.75.75 0 0 1-1.5 0V4.81L8.03 17.03a.75.75 0 0 1-1.06-1.06L19.19 3.75h-3.44a.75.75 0 0 1 0-1.5Zm-10.5 4.5a1.5 1.5 0 0 0-1.5 1.5v10.5a1.5 1.5 0 0 0 1.5 1.5h10.5a1.5 1.5 0 0 0 1.5-1.5V10.5a.75.75 0 0 1 1.5 0v8.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V8.25a3 3 0 0 1 3-3h8.25a.75.75 0 0 1 0 1.5H5.25Z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                        <a href="sentinel.hubku.com" class="flex items-center gap-1 py-2.5 px-3 md:px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-orange-400 hover:bg-gray-100 hover:text-amber-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                            Project Demo
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+                                <path fill-rule="evenodd" d="M16.72 7.72a.75.75 0 0 1 1.06 0l3.75 3.75a.75.75 0 0 1 0 1.06l-3.75 3.75a.75.75 0 1 1-1.06-1.06l2.47-2.47H3a.75.75 0 0 1 0-1.5h16.19l-2.47-2.47a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
                     </div>
                 </div>
-            )}
+                <p class="mt-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, rerum dolore odit atque quidem, ex blanditiis sunt cupiditate libero nihil obcaecati vel nam quo quia, voluptatibus nobis similique excepturi adipisci.</p>
+
+                <div class="my-8 lg:mb-16">
+                    <h2 class="font-bold text-2xl">Features</h2>
+
+                    <div class="mt-12">
+                        <div class="space-y-8 justify-center md:grid md:grid-cols-2 md:gap-12 md:space-y-0">
+                            <div class="flex flex-col items-center justify-center">
+                                <div class="flex justify-center items-center mb-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8 text-amber-500">
+                                        <path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="mb-2 text-xl font-bold dark:text-white">AI Powered Insights</h3>
+                                <p class="text-gray-500 dark:text-gray-400">AI agent to quickly summarize your data.</p>
+                            </div>
+                            <div class="flex flex-col items-center justify-center">
+                                <div class="flex justify-center items-center mb-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8 text-blue-600">
+                                        <path fill-rule="evenodd" d="M14.615 1.595a.75.75 0 0 1 .359.852L12.982 9.75h7.268a.75.75 0 0 1 .548 1.262l-10.5 11.25a.75.75 0 0 1-1.272-.71l1.992-7.302H3.75a.75.75 0 0 1-.548-1.262l10.5-11.25a.75.75 0 0 1 .913-.143Z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="mb-2 text-xl font-bold dark:text-white">Near Real Time</h3>
+                                <p class="text-gray-500 dark:text-gray-400">See user events as they happen.</p>
+                            </div>
+                            <div class="flex flex-col items-center justify-center">
+                                <div class="flex justify-center items-center mb-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8 text-purple-600">
+                                        <path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 0 1 8.25-8.25.75.75 0 0 1 .75.75v6.75H18a.75.75 0 0 1 .75.75 8.25 8.25 0 0 1-16.5 0Z" clip-rule="evenodd"></path>
+                                        <path fill-rule="evenodd" d="M12.75 3a.75.75 0 0 1 .75-.75 8.25 8.25 0 0 1 8.25 8.25.75.75 0 0 1-.75.75h-7.5a.75.75 0 0 1-.75-.75V3Z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="mb-2 text-xl font-bold dark:text-white">Useful Summary</h3>
+                                <p class="text-gray-500 dark:text-gray-400">Crystal clear insights into user behavior.</p>
+                            </div>
+                            <div class="flex flex-col items-center justify-center">
+                                <div class="flex justify-center items-center mb-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8 text-green-600">
+                                        <path fill-rule="evenodd" d="M1.5 7.125c0-1.036.84-1.875 1.875-1.875h6c1.036 0 1.875.84 1.875 1.875v3.75c0 1.036-.84 1.875-1.875 1.875h-6A1.875 1.875 0 0 1 1.5 10.875v-3.75Zm12 1.5c0-1.036.84-1.875 1.875-1.875h5.25c1.035 0 1.875.84 1.875 1.875v8.25c0 1.035-.84 1.875-1.875 1.875h-5.25a1.875 1.875 0 0 1-1.875-1.875v-8.25ZM3 16.125c0-1.036.84-1.875 1.875-1.875h5.25c1.036 0 1.875.84 1.875 1.875v2.25c0 1.035-.84 1.875-1.875 1.875h-5.25A1.875 1.875 0 0 1 3 18.375v-2.25Z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="mb-2 text-xl font-bold dark:text-white">Project Based Event</h3>
+                                <p class="text-gray-500 dark:text-gray-400">Divide & organize events as easy as cake.</p>
+                            </div>
+                            <div class="flex flex-col items-center justify-center">
+                                <div class="flex justify-center items-center mb-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8 text-red-600">
+                                        <path fill-rule="evenodd" d="M15.75 1.5a6.75 6.75 0 0 0-6.651 7.906c.067.39-.032.717-.221.906l-6.5 6.499a3 3 0 0 0-.878 2.121v2.818c0 .414.336.75.75.75H6a.75.75 0 0 0 .75-.75v-1.5h1.5A.75.75 0 0 0 9 19.5V18h1.5a.75.75 0 0 0 .53-.22l2.658-2.658c.19-.189.517-.288.906-.22A6.75 6.75 0 1 0 15.75 1.5Zm0 3a.75.75 0 0 0 0 1.5A2.25 2.25 0 0 1 18 8.25a.75.75 0 0 0 1.5 0 3.75 3.75 0 0 0-3.75-3.75Z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <h3 class="mb-2 text-xl font-bold dark:text-white">Key Based Communication</h3>
+                                <p class="text-gray-500 dark:text-gray-400">Easy to use API with key as authentication.</p>
+                            </div>
+                            <div class="flex flex-col items-center justify-center">
+                                <div class="flex justify-center items-center mb-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8 text-brown-600">
+                                        <path fill-rule="evenodd" d="M19.5 21a3 3 0 0 0 3-3V9a3 3 0 0 0-3-3h-5.379a.75.75 0 0 1-.53-.22L11.47 3.66A2.25 2.25 0 0 0 9.879 3H4.5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h15Zm-6.75-10.5a.75.75 0 0 0-1.5 0v4.19l-1.72-1.72a.75.75 0 0 0-1.06 1.06l3 3a.75.75 0 0 0 1.06 0l3-3a.75.75 0 1 0-1.06-1.06l-1.72 1.72V10.5Z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="mb-2 text-xl font-bold dark:text-white">Download-able Data</h3>
+                                <p class="text-gray-500 dark:text-gray-400">Easily export your event data into various formats.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="my-8 lg:my-16">
+                    <h2 class="font-bold text-2xl">Technologies</h2>
+
+                    <div class="mt-12">
+                        <div class="space-y-8 justify-center grid grid-cols-2 md:grid-cols-4 md:gap-12 md:space-y-0">
+                            <div class="flex flex-col items-center gap-4">
+                                <img src="/media/tech/icons/golang.png" alt="golang" width="150" height="100">
+                                <p class="text-sm">Go Programming Language</p>
+                            </div>
+
+                            <div class="flex flex-col items-center gap-4">
+                                <img src="/media/tech/icons/postgres.png" alt="postgresql" width="130" height="100">
+                                <p class="text-sm">PostgreSQL Database</p>
+                            </div>
+
+                            <div class="flex flex-col items-center gap-4">
+                                <img src="/media/tech/icons/redis.png" alt="redis" width="130" height="100">
+                                <p class="text-sm">Redis Database</p>
+                            </div>
+
+                            <div class="flex flex-col items-center gap-4">
+                                <img src="/media/tech/icons/javascript.png" alt="Golang" width="130" height="100">
+                                <p class="text-sm">JavaScript</p>
+                            </div>
+
+                            <div class="flex flex-col items-center gap-4">
+                                <img src="/media/tech/icons/htmx.png" alt="htmx" width="150" height="100">
+                                <p class="text-sm">HTMX</p>
+                            </div>
+
+                            <div class="flex flex-col items-center gap-4">
+                                <img src="/media/tech/icons/alpinejs.png" alt="alpinejs" width="100" height="100">
+                                <p class="text-sm">AlpineJS</p>
+                            </div>
+
+                            <div class="flex flex-col items-center gap-4">
+                                <img src="/media/tech/icons/tailwindcss.png" alt="tailwindcss" width="100" height="100">
+                                <p class="text-sm">Tailwind CSS</p>
+                            </div>
+
+                            <div class="flex flex-col items-center gap-4">
+                                <img src="/media/tech/icons/nodejs.png" alt="nodejs" width="100" height="100">
+                                <p class="text-sm">NodeJS</p>
+                            </div>
+
+                            <div class="flex flex-col items-center gap-4">
+                                <img src="/media/tech/icons/langchain.png" alt="langchain" width="100" height="100">
+                                <p class="text-sm">Langchain</p>
+                            </div>
+
+                            <div class="flex flex-col items-center gap-4">
+                                <img src="/media/tech/icons/openai.png" alt="playwright" width="100" height="100">
+                                <p class="text-sm">OpenAI</p>
+                            </div>
+
+                            <div class="flex flex-col items-center gap-4">
+                                <img src="/media/tech/icons/playwright.png" alt="playwright" width="100" height="100">
+                                <p class="text-sm">Playwright</p>
+                            </div>
+
+                            <div class="flex flex-col items-center gap-4">
+                                <img src="/media/tech/icons/docusaurus.png" alt="playwright" width="100" height="100">
+                                <p class="text-sm">Docusaurus</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- {showcaseData.map((v, idx) =>  -->
+                <!--     <div class={`flex flex-col my-12 lg:my-0 ${(idx % 2 === 0) ? "lg:flex-row" : "lg:flex-row-reverse"} justify-start items-center px-4 mx-auto max-w-screen-xl xl:gap-16 sm:py-8 lg:px-48`}> -->
+                <!--         <Image class="dark:hidden" width="500" height="400" src={v.images[0]} alt={v.title} /> -->
+                <!--         <div class="mt-4 md:mt-0"> -->
+                <!--             <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">{v.title}</h2> -->
+                <!--             <p class="mb-6 font-light text-gray-500 md:text-lg dark:text-gray-400">{v.description}</p> -->
+                <!--             {v.demoURL ?  -->
+                <!--                 <a href={v.demoURL} class="inline-flex items-center text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:ring-violet-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-primary-900"> -->
+                <!--                     Demo -->
+                <!--                 </a> -->
+                <!--                 : ""} -->
+                <!--             {v.sourceURL ?  -->
+                <!--                 <a href={v.sourceURL} class="inline-flex items-center border-gray-100 border-solid text-white hover:bg-violet-200 focus:ring-4 focus:ring-violet-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-violer-900"> -->
+                <!--                     Source Code -->
+                <!--                 </a> -->
+                <!--                 : "" } -->
+                <!--         </div> -->
+                <!--     </div> -->
+                <!-- )} -->
         </section>
     </main>
 </Layout>
+
+<script>
+import Swiper from 'swiper';
+
+const swiper = new Swiper('.swiper', {
+    initialSlide: 1,
+    grabCursor: true,
+    centeredSlides: true,
+    slidesPerView: "auto",
+});
+</script>

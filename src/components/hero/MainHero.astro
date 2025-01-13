@@ -1,9 +1,43 @@
-<section class="bg-white dark:bg-gray-900">
-	<div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
-		<h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Curated Projects Combined Here</h1>
-		<p class="mb-8 text-xs font-normal text-gray-700 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">Built by <a href="https://res.hubku.com" class="underline">@resqiar</a>. It's a place where you can check out everything devs been working on, and maybe even use some of the stuff if it catches your eye. Think of it as my dev playground, all in one spot.</p>
+<style>
+	.swiper-slide-prev img {
+		scale: 0.9;
+		transition: all 500ms ease-in-out;
+	}
 
-		<div class="flex items-center w-full gap-16 mt-12 mb-16 justify-center">
+	.swiper-slide-active img {
+		scale: 1;
+		transition: all 500ms ease-in-out;
+	}
+
+	.swiper-slide-next img {
+		scale: 0.9;
+		transition: all 500ms ease-in-out;
+	}
+</style>
+
+<section class="dark:bg-gray-900">
+	<div class="bg-amber-50 pt-8 px-4 text-center lg:pt-16 pb-96 lg:px-12">
+		<div class="w-full flex flex-col items-center">
+			<h1 class="md:max-w-4xl mb-4 text-3xl font-extrabold tracking-wide leading-[50px] lg:!leading-[75px] text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Lift Your <span class="px-1 bg-yellow-200 italic">Big Idea</span> with the <span class="px-1 bg-yellow-200 italic">Perfect Software</span></h1>
+			<p class="mb-8 text-xs font-normal text-gray-700 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">We provide quality software you can customize to meet your project needs. Save time, cut costs, and streamline your development workflow with solutions built for scalability and performance.</p>
+		</div>
+
+		<div class="flex justify-center">
+			<button type="button" class="flex gap-1 items-center text-white bg-amber-700 hover:bg-amber-800 focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-sm px-2 lg:px-5 py-2.5 me-2 mb-2 dark:bg-amber-600 dark:hover:bg-amber-700 focus:outline-none dark:focus:ring-amber-800">
+				Schedule Quick Chat
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
+					<path fill-rule="evenodd" d="M15.75 2.25H21a.75.75 0 0 1 .75.75v5.25a.75.75 0 0 1-1.5 0V4.81L8.03 17.03a.75.75 0 0 1-1.06-1.06L19.19 3.75h-3.44a.75.75 0 0 1 0-1.5Zm-10.5 4.5a1.5 1.5 0 0 0-1.5 1.5v10.5a1.5 1.5 0 0 0 1.5 1.5h10.5a1.5 1.5 0 0 0 1.5-1.5V10.5a.75.75 0 0 1 1.5 0v8.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V8.25a3 3 0 0 1 3-3h8.25a.75.75 0 0 1 0 1.5H5.25Z" clip-rule="evenodd" />
+				</svg>
+			</button>
+			<a href="#projects" class="flex items-center gap-1 py-2.5 px-2 md:px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-orange-400 hover:bg-gray-100 hover:text-amber-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+				List Project Example
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+					<path fill-rule="evenodd" d="M16.72 7.72a.75.75 0 0 1 1.06 0l3.75 3.75a.75.75 0 0 1 0 1.06l-3.75 3.75a.75.75 0 1 1-1.06-1.06l2.47-2.47H3a.75.75 0 0 1 0-1.5h16.19l-2.47-2.47a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+				</svg>
+			</a>
+		</div>
+
+		<div class="flex items-center w-full gap-16 mt-12 justify-center">
 			<a
 				href="https://github.com/resqiar"
 				target="_blank"
@@ -16,7 +50,7 @@
 					xmlns="http://www.w3.org/2000/svg"
 					fill="currentColor"
 					viewBox="0 0 20 20"
-				>
+					>
 					<path
 						fill-rule="evenodd"
 						d="M10 .333A9.911 9.911 0 0 0 6.866 19.65c.5.092.678-.215.678-.477 0-.237-.01-1.017-.014-1.845-2.757.6-3.338-1.169-3.338-1.169a2.627 2.627 0 0 0-1.1-1.451c-.9-.615.07-.6.07-.6a2.084 2.084 0 0 1 1.518 1.021 2.11 2.11 0 0 0 2.884.823c.044-.503.268-.973.63-1.325-2.2-.25-4.516-1.1-4.516-4.9A3.832 3.832 0 0 1 4.7 7.068a3.56 3.56 0 0 1 .095-2.623s.832-.266 2.726 1.016a9.409 9.409 0 0 1 4.962 0c1.89-1.282 2.717-1.016 2.717-1.016.366.83.402 1.768.1 2.623a3.827 3.827 0 0 1 1.02 2.659c0 3.807-2.319 4.644-4.525 4.889a2.366 2.366 0 0 1 .673 1.834c0 1.326-.012 2.394-.012 2.72 0 .263.18.572.681.475A9.911 9.911 0 0 0 10 .333Z"
@@ -38,7 +72,7 @@
 					xmlns="http://www.w3.org/2000/svg"
 					fill="currentColor"
 					viewBox="0 0 20 17"
-				>
+					>
 					<path
 						fill-rule="evenodd"
 						d="M20 1.892a8.178 8.178 0 0 1-2.355.635 4.074 4.074 0 0 0 1.8-2.235 8.344 8.344 0 0 1-2.605.98A4.13 4.13 0 0 0 13.85 0a4.068 4.068 0 0 0-4.1 4.038 4 4 0 0 0 .105.919A11.705 11.705 0 0 1 1.4.734a4.006 4.006 0 0 0 1.268 5.392 4.165 4.165 0 0 1-1.859-.5v.05A4.057 4.057 0 0 0 4.1 9.635a4.19 4.19 0 0 1-1.856.07 4.108 4.108 0 0 0 3.831 2.807A8.36 8.36 0 0 1 0 14.184 11.732 11.732 0 0 0 6.291 16 11.502 11.502 0 0 0 17.964 4.5c0-.177 0-.35-.012-.523A8.143 8.143 0 0 0 20 1.892Z"
@@ -59,7 +93,7 @@
 					xmlns="http://www.w3.org/2000/svg"
 					fill="currentColor"
 					viewBox="0 0 20 14"
-				>
+					>
 					<path
 						fill-rule="evenodd"
 						d="M19.7 3.037a4.26 4.26 0 0 0-.789-1.964 2.84 2.84 0 0 0-1.984-.84c-2.767-.2-6.926-.2-6.926-.2s-4.157 0-6.928.2a2.836 2.836 0 0 0-1.983.84A4.225 4.225 0 0 0 .3 3.038a30.148 30.148 0 0 0-.2 3.206v1.5c.01 1.071.076 2.142.2 3.206.094.712.363 1.39.784 1.972.604.536 1.38.837 2.187.848 1.583.15 6.731.2 6.731.2s4.161 0 6.928-.2a2.844 2.844 0 0 0 1.985-.84 4.27 4.27 0 0 0 .787-1.965c.124-1.064.19-2.135.2-3.206V6.243a30.672 30.672 0 0 0-.202-3.206ZM8.008 9.59V3.97l5.4 2.819-5.4 2.8Z"
@@ -77,7 +111,7 @@
 					stroke-width="1.5"
 					stroke="currentColor"
 					class="h-6 w-6"
-				>
+					>
 					<path
 						stroke-linecap="round"
 						d="M16.5 12a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 10-2.636 6.364M16.5 12V8.25"
@@ -85,15 +119,27 @@
 				</svg>
 			</a>
 		</div>
+	</div>
 
-
-		<div class="flex flex-col mb-2 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
-			<a href="#projects" class="hover:underline flex flex-col justify-center items-center py-3 px-5 text-base font-medium text-center rounded-lg focus:ring-4 focus:ring-violet-300 dark:focus:ring-violet-900">
-				See The List
-				<svg class="mt-2 animate-bounce w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-					<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19V5m0 14-4-4m4 4 4-4"/>
-				</svg>
-			</a>
+	<div class="flex justify-center -mt-80">
+		<div class="swiper">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide !w-fit px-4">
+					<img src="/media/internal/sentinel-img.png" alt="Hero Showcase Image" height="400" width="1000" class="rounded-lg border-gray-300 border">
+				</div>
+				<div class="swiper-slide !w-fit px-4">
+					<img src="/media/internal/sentinel-2.png" alt="Hero Showcase Image" height="400" width="1000" class="rounded-lg border-gray-300 border">
+				</div>
+				<div class="swiper-slide !w-fit px-4">
+					<img src="/media/internal/sentinel-3.png" alt="Hero Showcase Image" height="400" width="1000" class="rounded-lg border-gray-300 border">
+				</div>
+				<div class="swiper-slide !w-fit px-4">
+					<img src="/media/internal/sentinel-4.png" alt="Hero Showcase Image" height="400" width="1000" class="rounded-lg border-gray-300 border">
+				</div>
+				<div class="swiper-slide !w-fit px-4">
+					<img src="/media/internal/sentinel-5.png" alt="Hero Showcase Image" height="400" width="1000" class="rounded-lg border-gray-300 border">
+				</div>
+			</div>
 		</div>
 	</div>
 </section>
