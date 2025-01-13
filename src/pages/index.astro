@@ -23,7 +23,7 @@ import 'swiper/css';
                                 <path fill-rule="evenodd" d="M15.75 2.25H21a.75.75 0 0 1 .75.75v5.25a.75.75 0 0 1-1.5 0V4.81L8.03 17.03a.75.75 0 0 1-1.06-1.06L19.19 3.75h-3.44a.75.75 0 0 1 0-1.5Zm-10.5 4.5a1.5 1.5 0 0 0-1.5 1.5v10.5a1.5 1.5 0 0 0 1.5 1.5h10.5a1.5 1.5 0 0 0 1.5-1.5V10.5a.75.75 0 0 1 1.5 0v8.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V8.25a3 3 0 0 1 3-3h8.25a.75.75 0 0 1 0 1.5H5.25Z" clip-rule="evenodd" />
                             </svg>
                         </button>
-                        <a href="sentinel.hubku.com" class="flex items-center gap-1 py-2.5 px-3 md:px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-orange-400 hover:bg-gray-100 hover:text-amber-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                        <a href="https://sentinel.hubku.com?utm_medium=hubku.com" target="_blank" class="flex items-center gap-1 py-2.5 px-3 md:px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-orange-400 hover:bg-gray-100 hover:text-amber-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                             Project Demo
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
                                 <path fill-rule="evenodd" d="M16.72 7.72a.75.75 0 0 1 1.06 0l3.75 3.75a.75.75 0 0 1 0 1.06l-3.75 3.75a.75.75 0 1 1-1.06-1.06l2.47-2.47H3a.75.75 0 0 1 0-1.5h16.19l-2.47-2.47a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
@@ -34,7 +34,11 @@ import 'swiper/css';
                 <p class="mt-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, rerum dolore odit atque quidem, ex blanditiis sunt cupiditate libero nihil obcaecati vel nam quo quia, voluptatibus nobis similique excepturi adipisci.</p>
 
                 <div class="my-8 lg:mb-16">
-                    <h2 class="font-bold text-2xl">Features</h2>
+                    <div class="flex gap-8 items-center">
+                        <h2 class="font-bold text-2xl">Features</h2>
+                        <hr class="flex-1 h-px my-8 bg-gray-300 border-0 dark:bg-gray-700">
+                    </div>
+                    <p class="mt-2 text-sm">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quod eum reprehenderit illum explicabo id voluptatem numquam.</p>
 
                     <div class="mt-12">
                         <div class="space-y-8 justify-center md:grid md:grid-cols-2 md:gap-12 md:space-y-0">
@@ -98,7 +102,11 @@ import 'swiper/css';
                 </div>
 
                 <div class="my-8 lg:my-16">
-                    <h2 class="font-bold text-2xl">Technologies</h2>
+                    <div class="flex gap-8 items-center">
+                        <h2 class="font-bold text-2xl">Technologies</h2>
+                        <hr class="flex-1 h-px my-8 bg-gray-300 border-0 dark:bg-gray-700">
+                    </div>
+                    <p class="mt-2 text-sm">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quod eum reprehenderit illum explicabo id voluptatem numquam.</p>
 
                     <div class="mt-12">
                         <div class="space-y-8 justify-center grid grid-cols-2 md:grid-cols-4 md:gap-12 md:space-y-0">
@@ -148,7 +156,7 @@ import 'swiper/css';
                             </div>
 
                             <div class="flex flex-col items-center gap-4">
-                                <img src="/media/tech/icons/openai.png" alt="playwright" width="100" height="100">
+                                <img src="/media/tech/icons/openai.png" alt="openai" width="100" height="100">
                                 <p class="text-sm">OpenAI</p>
                             </div>
 
@@ -158,32 +166,184 @@ import 'swiper/css';
                             </div>
 
                             <div class="flex flex-col items-center gap-4">
-                                <img src="/media/tech/icons/docusaurus.png" alt="playwright" width="100" height="100">
+                                <img src="/media/tech/icons/docusaurus.png" alt="docusaurus" width="100" height="100">
                                 <p class="text-sm">Docusaurus</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- {showcaseData.map((v, idx) =>  -->
-                <!--     <div class={`flex flex-col my-12 lg:my-0 ${(idx % 2 === 0) ? "lg:flex-row" : "lg:flex-row-reverse"} justify-start items-center px-4 mx-auto max-w-screen-xl xl:gap-16 sm:py-8 lg:px-48`}> -->
-                <!--         <Image class="dark:hidden" width="500" height="400" src={v.images[0]} alt={v.title} /> -->
-                <!--         <div class="mt-4 md:mt-0"> -->
-                <!--             <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">{v.title}</h2> -->
-                <!--             <p class="mb-6 font-light text-gray-500 md:text-lg dark:text-gray-400">{v.description}</p> -->
-                <!--             {v.demoURL ?  -->
-                <!--                 <a href={v.demoURL} class="inline-flex items-center text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:ring-violet-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-primary-900"> -->
-                <!--                     Demo -->
-                <!--                 </a> -->
-                <!--                 : ""} -->
-                <!--             {v.sourceURL ?  -->
-                <!--                 <a href={v.sourceURL} class="inline-flex items-center border-gray-100 border-solid text-white hover:bg-violet-200 focus:ring-4 focus:ring-violet-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-violer-900"> -->
-                <!--                     Source Code -->
-                <!--                 </a> -->
-                <!--                 : "" } -->
-                <!--         </div> -->
-                <!--     </div> -->
-                <!-- )} -->
+                <div class="my-8 lg:my-16">
+                    <div class="flex gap-8 items-center">
+                        <h2 class="font-bold text-2xl">Source Code Available</h2>
+                        <hr class="flex-1 h-px my-8 bg-gray-300 border-0 dark:bg-gray-700">
+                    </div>
+                    <p class="mt-2 text-sm">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quod eum reprehenderit illum explicabo id voluptatem numquam.</p>
+
+                    <div class="mt-12 flex flex-wrap items-center justify-center gap-4">
+                        <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Sentinel (Main Code)</h5>
+                            <p class="font-normal text-gray-700 dark:text-gray-400">Go:Fiber application along with PostgreSQL and Redis.</p>
+                        </div>
+
+                        <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Sentinel AI Agent</h5>
+                            <p class="font-normal text-gray-700 dark:text-gray-400">NodeJS server to handle AI use-case from Sentinel main code. Integrated with Langchain and OpenAI.</p>
+                        </div>
+
+                        <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Sentinel GUI Documentation</h5>
+                            <p class="font-normal text-gray-700 dark:text-gray-400">Web-based full documentation readily available built using Docusaurus.</p>
+                        </div>
+
+                        <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Sentinel UI Test</h5>
+                            <p class="font-normal text-gray-700 dark:text-gray-400">End-to-end test built using Playwright to fully test UI capability of Sentinel.</p>
+                        </div>
+                    </div>
+
+                    <div class="my-8 lg:my-16">
+                        <div class="flex gap-8 items-center">
+                            <h2 class="font-bold text-2xl">Purchase Bundle</h2>
+                            <hr class="flex-1 h-px my-8 bg-gray-300 border-0 dark:bg-gray-700">
+                        </div>
+                        <p class="mt-2 text-sm">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quod eum reprehenderit illum explicabo id voluptatem numquam.</p>
+
+                        <div class="mt-12 flex items-center justify-center gap-10">
+                            <div class="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+                                <h5 class="mb-4 text-xl font-medium text-gray-500 dark:text-gray-400">Standard Bundle</h5>
+                                <div class="flex items-baseline text-gray-900 dark:text-white">
+                                    <span class="text-3xl font-semibold">$</span>
+                                    <span class="text-5xl font-extrabold tracking-tight">499</span>
+                                    <span class="ms-1 text-xl font-normal text-gray-500 dark:text-gray-400">/lifetime</span>
+                                </div>
+                                <ul role="list" class="space-y-5 my-7">
+                                    <li class="flex items-center">
+                                        <svg class="flex-shrink-0 w-4 h-4 text-orange-500 dark:text-orange-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                        </svg>
+                                        <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Full Ownership</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="flex-shrink-0 w-4 h-4 text-orange-500 dark:text-orange-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                        </svg>
+                                        <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Sentinel Main Code</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="flex-shrink-0 w-4 h-4 text-orange-500 dark:text-orange-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                        </svg>
+                                        <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Basic Markdown Documentation</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="flex-shrink-0 w-4 h-4 text-orange-500 dark:text-orange-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                        </svg>
+                                        <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Docker Compose Configuration</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="flex-shrink-0 w-4 h-4 text-orange-500 dark:text-orange-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                        </svg>
+                                        <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Github Action Auto Deploy Config</span>
+                                    </li>
+                                    <li class="flex line-through decoration-gray-500">
+                                        <svg class="flex-shrink-0 w-4 h-4 text-gray-400 dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                        </svg>
+                                        <span class="text-base font-normal leading-tight text-gray-500 ms-3">Sentinel AI Agent</span>
+                                    </li>
+                                    <li class="flex line-through decoration-gray-500">
+                                        <svg class="flex-shrink-0 w-4 h-4 text-gray-400 dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                        </svg>
+                                        <span class="text-base font-normal leading-tight text-gray-500 ms-3">Sentinel GUI Documentation</span>
+                                    </li>
+                                    <li class="flex line-through decoration-gray-500">
+                                        <svg class="flex-shrink-0 w-4 h-4 text-gray-400 dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                        </svg>
+                                        <span class="text-base font-normal leading-tight text-gray-500 ms-3">Sentinel Playwright UI Test</span>
+                                    </li>
+                                    <li class="flex line-through decoration-gray-500">
+                                        <svg class="flex-shrink-0 w-4 h-4 text-gray-400 dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                        </svg>
+                                        <span class="text-base font-normal leading-tight text-gray-500 ms-3">3 Months Update Request</span>
+                                    </li>
+                                </ul>
+                                <button type="button" class="text-white bg-orange-300 focus:ring-4 focus:outline-none focus:ring-blue-200 dark:bg-blue-600 dark:hover:bg-orange-700 dark:focus:ring-blue-900 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex justify-center w-full text-center" disabled>Coming Soon</button>
+                            </div>
+
+                            <div class="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+                                <h5 class="mb-4 text-xl font-medium text-gray-500 dark:text-gray-400">Plus Bundle</h5>
+                                <div class="flex items-baseline text-gray-900 dark:text-white">
+                                    <span class="text-3xl font-semibold">$</span>
+                                    <span class="text-5xl font-extrabold tracking-tight">799</span>
+                                    <span class="ms-1 text-xl font-normal text-gray-500 dark:text-gray-400">/lifetime</span>
+                                </div>
+                                <ul role="list" class="space-y-5 my-7">
+                                    <li class="flex items-center">
+                                        <svg class="flex-shrink-0 w-4 h-4 text-orange-500 dark:text-orange-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                        </svg>
+                                        <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Full Ownership</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="flex-shrink-0 w-4 h-4 text-orange-500 dark:text-orange-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                        </svg>
+                                        <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Sentinel Main Code</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="flex-shrink-0 w-4 h-4 text-orange-500 dark:text-orange-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                        </svg>
+                                        <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Basic Markdown Documentation</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="flex-shrink-0 w-4 h-4 text-orange-500 dark:text-orange-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                        </svg>
+                                        <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Docker Compose Configuration</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="flex-shrink-0 w-4 h-4 text-orange-500 dark:text-orange-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                        </svg>
+                                        <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Github Action Auto Deploy Config</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="flex-shrink-0 w-4 h-4 text-orange-500 dark:text-orange-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                        </svg>
+                                        <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Sentinel AI Agent</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="flex-shrink-0 w-4 h-4 text-orange-500 dark:text-orange-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                        </svg>
+                                        <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Sentinel GUI Documentation</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="flex-shrink-0 w-4 h-4 text-orange-500 dark:text-orange-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                        </svg>
+                                        <span class="text-base font-normal leading-tight text-gray-500 ms-3">Sentinel Playwright UI Test</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="flex-shrink-0 w-4 h-4 text-orange-500 dark:text-orange-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                        </svg>
+                                        <span class="text-base font-normal leading-tight text-gray-500 ms-3">3 Months Update Request</span>
+                                    </li>
+                                </ul>
+                                <button type="button" class="text-white bg-orange-300 focus:ring-4 focus:outline-none focus:ring-blue-200 dark:bg-blue-600 dark:hover:bg-orange-700 dark:focus:ring-blue-900 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex justify-center w-full text-center" disabled>Coming Soon</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         </section>
     </main>
 </Layout>
@@ -191,7 +351,7 @@ import 'swiper/css';
 <script>
 import Swiper from 'swiper';
 
-const swiper = new Swiper('.swiper', {
+new Swiper('.swiper', {
     initialSlide: 1,
     grabCursor: true,
     centeredSlides: true,
