@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import MainNavbar from '../components/header/MainNavbar.astro';
 import MainHero from '../components/hero/MainHero.astro';
+import SentinelTree from '../components/tree/SentinelTree.astro';
 import 'swiper/css';
 ---
 
@@ -17,12 +18,12 @@ import 'swiper/css';
                     <h2 class="font-bold text-4xl">Sentinel.</h2>
 
                     <div class="mt-4 md:mt-0 w-full md:w-fit flex">
-                        <button type="button" class="flex gap-1 items-center text-white bg-amber-700 hover:bg-amber-800 focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-sm px-3 md:px-5 py-2.5 me-2 mb-2 dark:bg-amber-600 dark:hover:bg-amber-700 focus:outline-none dark:focus:ring-amber-800">
+                        <a href="#bundle" class="flex gap-1 items-center text-white bg-amber-700 hover:bg-amber-800 focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-sm px-3 md:px-5 py-2.5 me-2 mb-2 dark:bg-amber-600 dark:hover:bg-amber-700 focus:outline-none dark:focus:ring-amber-800">
                             Buy the Code
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
                                 <path fill-rule="evenodd" d="M15.75 2.25H21a.75.75 0 0 1 .75.75v5.25a.75.75 0 0 1-1.5 0V4.81L8.03 17.03a.75.75 0 0 1-1.06-1.06L19.19 3.75h-3.44a.75.75 0 0 1 0-1.5Zm-10.5 4.5a1.5 1.5 0 0 0-1.5 1.5v10.5a1.5 1.5 0 0 0 1.5 1.5h10.5a1.5 1.5 0 0 0 1.5-1.5V10.5a.75.75 0 0 1 1.5 0v8.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V8.25a3 3 0 0 1 3-3h8.25a.75.75 0 0 1 0 1.5H5.25Z" clip-rule="evenodd" />
                             </svg>
-                        </button>
+                        </a>
                         <a href="https://sentinel.hubku.com?utm_medium=hubku.com" target="_blank" class="flex items-center gap-1 py-2.5 px-3 md:px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-orange-400 hover:bg-gray-100 hover:text-amber-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                             Project Demo
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
@@ -203,6 +204,17 @@ import 'swiper/css';
                     </div>
 
                     <div class="my-8 lg:my-16">
+                        <div class="flex gap-8 items-center">
+                            <h2 class="font-bold text-2xl">Folder Structure</h2>
+                            <hr class="flex-1 h-px my-8 bg-gray-300 border-0 dark:bg-gray-700">
+                        </div>
+
+                        <div>
+                            <SentinelTree/>
+                        </div>
+                    </div>
+
+                    <div id="bundle" class="my-8 lg:my-16">
                         <div class="flex gap-8 items-center">
                             <h2 class="font-bold text-2xl">Purchase Bundle</h2>
                             <hr class="flex-1 h-px my-8 bg-gray-300 border-0 dark:bg-gray-700">
