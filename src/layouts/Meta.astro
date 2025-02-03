@@ -16,6 +16,8 @@ const DEFAULT_TYPE: string = 'website';
 ---
 
 <head>
+	<slot/>
+
 	<title>{title ? title : DEFAULT_TITLE}</title>
 	<meta name="description" content={description ? description : DEFAULT_DESC} />
 	<meta name="image" content={imageURL ? imageURL : '/media/hubku-square-logo.png'} />
